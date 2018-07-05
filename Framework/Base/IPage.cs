@@ -11,20 +11,9 @@ namespace Xarial.VPages.Core
         BindingGroup Binding { get; }
     }
 
-    public abstract class BasePage : IPage
+    public abstract class Page : Group, IPage
     {
-        public virtual event ControlValueChangedDelegate ValueChanged;
-
         private BindingGroup m_Binding;
-
-        public virtual object GetValue()
-        {
-            return null;
-        }
-
-        public virtual void SetValue(object value)
-        {
-        }
 
         public BindingGroup Binding
         {

@@ -9,12 +9,22 @@ using Xarial.VPages.Core.Constructors;
 namespace Xarial.VPages.WinForms
 {
     [DataType(typeof(string))]
-    public class TextBoxConstructor : IControlConstructor<Control, Page, Group>
+    public class TextBoxConstructor : IControlConstructor<TextBoxControl, FormGroup, FormPage>
     {
-        public Control Create(Page page, Group parent, AttributeSet atts)
+        public TextBoxControl Create(FormPage page, AttributeSet atts)
+        {
+            return CreateControl(page.Panel.Controls);
+        }
+
+        public TextBoxControl Create(FormGroup group, AttributeSet atts)
+        {
+            throw new NotImplementedException();
+        }
+
+        private TextBoxControl CreateControl(System.Windows.Forms.Control.ControlCollection ctrls)
         {
             var ctrl = new TextBoxControl();
-            page.Panel.Controls.Add(ctrl.TextBox);
+            ctrls.Add(ctrl.TextBox);
             return ctrl;
         }
     }

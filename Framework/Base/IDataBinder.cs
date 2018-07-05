@@ -10,6 +10,7 @@ namespace Xarial.VPages.Core
     //    IBinding binding, IBinding parentBinding, AttributeSet attributes);
 
     public delegate IControl BindToControlDelegate(DataModelInfo info, IGroup parent);
+    public delegate IPage CreatePageDelegate(DataModelInfo info);
 
     public interface IDataModelBinder
     {
@@ -17,7 +18,7 @@ namespace Xarial.VPages.Core
         //event BindToPage<TDataModel> BindToPage;
         //event BindToControlDelegate<TDataModel> BindToControl;
 
-        BindingGroup Bind(object model, BindToControlDelegate ctrlCreator);
+        BindingGroup Bind(object model, CreatePageDelegate pageCreator, BindToControlDelegate ctrlCreator);
         //void Bind(TDataModel model);
     }
 }

@@ -8,12 +8,12 @@ using Xarial.VPages.Core.Parsers;
 
 namespace Xarial.VPages.WinForms
 {
-    public class WinFormsPageBuilder : PageBuilder<Page, Group, Control>
+    public class WinFormsPageBuilder : PageBuilder<FormPage, FormGroup>
     {
         public WinFormsPageBuilder(IDataModelBinder dataBinder)
-            : base(dataBinder, new PageConstructor(), 
-                  new IGroupConstructor<Group, Page>[] { new GroupConstructor() },
-                  new IControlConstructor<Control, Page, Group>[] 
+            : base(dataBinder, new FormPageConstructor(), 
+                  new IGroupConstructor<FormGroup, FormPage>[] { new FormGroupConstructor() },
+                  new IControlConstructor<IControl, FormGroup, FormPage>[] 
                   {
                       new TextBoxConstructor(),
                       new NumberBoxConstructor()

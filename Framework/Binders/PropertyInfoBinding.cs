@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Xarial.VPages.Core.Binders
 {
-    public class PropertyInfoBinding : BaseBinding
+    public class PropertyInfoBinding : Binding
     {
         private IList<PropertyInfo> m_Parents;
 

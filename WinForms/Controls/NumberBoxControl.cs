@@ -7,9 +7,9 @@ using Xarial.VPages.Core;
 
 namespace Xarial.VPages.WinForms
 {
-    public class NumberBoxControl : Control
+    public class NumberBoxControl : FormControl<decimal>
     {
-        public override event ControlValueChangedDelegate ValueChanged;
+        protected override event ControlValueChangedDelegate<decimal> ValueChanged;
 
         internal NumericUpDown NumberBox { get; private set; }
 
@@ -24,12 +24,12 @@ namespace Xarial.VPages.WinForms
             ValueChanged?.Invoke(this, GetValue());
         }
 
-        public override object GetValue()
+        protected override decimal GetValue()
         {
             return NumberBox.Value;
         }
 
-        public override void SetValue(object value)
+        protected override void SetValue(decimal value)
         {
             NumberBox.Value = (decimal)value;
         }

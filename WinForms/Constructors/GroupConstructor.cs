@@ -7,11 +7,16 @@ using Xarial.VPages.Core.Constructors;
 
 namespace Xarial.VPages.WinForms
 {
-    public class GroupConstructor : IGroupConstructor<Group, Page>
+    public class FormGroupConstructor : IGroupConstructor<FormGroup, FormPage>
     {
-        public Group Create(Page page, Group parent, AttributeSet atts)
+        public FormGroup Create(FormPage page, AttributeSet atts)
         {
-            return null;
+            throw new NotImplementedException();
+        }
+
+        public FormGroup Create(FormGroup group, AttributeSet atts)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xarial.VPages.WinForms;
 
@@ -11,7 +12,7 @@ namespace WinFormsTests
         {
             public string TextField { get; set; }
 
-            public int NumberField { get; set; }
+            public decimal NumberField { get; set; }
         }
 
         [TestMethod]
@@ -21,6 +22,7 @@ namespace WinFormsTests
             var dm = new DataModelMock1();
             var p = bld.CreatePage(dm);
             p.Form.ShowDialog();
+            MessageBox.Show($"{dm.TextField} {dm.NumberField}");
         }
     }
 }

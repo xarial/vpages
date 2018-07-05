@@ -8,7 +8,7 @@ namespace Xarial.VPages.Core.Base
 {
     public class BindingGroup : ReadOnlyCollection<IBinding>
     {
-        public BindingGroup(IList<IBinding> bindings) : base(bindings)
+        internal BindingGroup(IList<IBinding> bindings) : base(bindings)
         {
         }
 
@@ -16,7 +16,7 @@ namespace Xarial.VPages.Core.Base
         {
         }
 
-        internal void CopyFrom(BindingGroup grp)
+        internal void Load(BindingGroup grp)
         {
             this.Items.Clear();
 

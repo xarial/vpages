@@ -5,11 +5,12 @@ using System.Text;
 
 namespace Xarial.VPages.Core.Constructors
 {
-    public interface IControlConstructor<TControl, TPage, TGroup> : IConstructor
+    public interface IControlConstructor<out TControl, TGroup, TPage> : IPageElementConstructor<TControl, TGroup, TPage>
         where TControl : IControl
         where TPage : IPage
         where TGroup : IGroup
     {
-        TControl Create(TPage page, TGroup parent, AttributeSet atts);
+        //TControl Create(TPage page, AttributeSet atts);
+        //TControl Create(TGroup group, AttributeSet atts);
     }
 }

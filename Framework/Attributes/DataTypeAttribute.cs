@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Xarial.VPages.Core.Attributes
 {
+    //DefaultTypeAttribute
     public class DataTypeAttribute : Attribute
     {
         public Type Type { get; private set; }

@@ -7,9 +7,9 @@ using Xarial.VPages.Core;
 
 namespace Xarial.VPages.WinForms
 {
-    public class TextBoxControl : Control
+    public class TextBoxControl : FormControl<string>
     {
-        public override event ControlValueChangedDelegate ValueChanged;
+        protected override event ControlValueChangedDelegate<string> ValueChanged;
 
         internal TextBox TextBox { get; private set; }
 
@@ -24,12 +24,12 @@ namespace Xarial.VPages.WinForms
             ValueChanged.Invoke(this, TextBox.Text);
         }
 
-        public override object GetValue()
+        protected override string GetValue()
         {
             return TextBox.Text;
         }
 
-        public override void SetValue(object value)
+        protected override void SetValue(string value)
         {
             TextBox.Text = value as string;
         }

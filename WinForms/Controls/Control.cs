@@ -6,12 +6,7 @@ using Xarial.VPages.Core;
 
 namespace Xarial.VPages.WinForms
 {
-    public abstract class Control : IControl
+    public abstract class FormControl<TVal> : Control<TVal>
     {
-        public abstract event ControlValueChangedDelegate ValueChanged;
-
-        public abstract object GetValue();
-
-        public abstract void SetValue(object value);
     }
 }

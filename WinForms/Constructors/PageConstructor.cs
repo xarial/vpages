@@ -7,11 +7,11 @@ using Xarial.VPages.Core.Constructors;
 
 namespace Xarial.VPages.WinForms
 {
-    public class PageConstructor : IPageConstructor<Page>
+    public class FormPageConstructor : IPageConstructor<FormPage>
     {
-        public Page Create(AttributeSet atts)
+        public FormPage Create(AttributeSet atts)
         {
-            return new Page();
+            return new FormPage();
         }
     }
 }

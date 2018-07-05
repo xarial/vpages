@@ -6,18 +6,7 @@ using Xarial.VPages.Core;
 
 namespace Xarial.VPages.WinForms
 {
-    public class Group : IGroup
+    public class FormGroup : Group
     {
-        public event ControlValueChangedDelegate ValueChanged;
-
-        public object GetValue()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetValue(object value)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

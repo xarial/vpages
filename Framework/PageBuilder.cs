@@ -9,15 +9,72 @@ using Xarial.VPages.Core.Constructors;
 
 namespace Xarial.VPages.Core
 {
-    public class PageBuilder<TPage, TGroup, TControl>
+    public class PageBuilder<TPage, TGroup>
         where TPage : IPage
         where TGroup : IGroup
-        where TControl : IControl
     {
+        private class ConstructorsIndex<TPageElem> : Dictionary<Type, IPageElementConstructor<TPageElem, TGroup, TPage>>
+            where TPageElem : IPageElement
+        {
+            internal ConstructorsIndex(IEnumerable<IPageElementConstructor<TPageElem, TGroup, TPage>> constructors)
+            {
+                IndexConstructors(constructors);
+            }
+
+            internal IPageElementConstructor<TPageElem, TGroup, TPage> FindConstructor(Type type)
+            {
+                IPageElementConstructor<TPageElem, TGroup, TPage> constr;
+
+                if (!TryGetValue(type, out constr))
+                {
+                    constr = this.FirstOrDefault(t => type.IsAssignableFrom(type)).Value;
+                }
+
+                if (constr != null)
+                {
+                    return constr;
+                }
+                else
+                {
+                    //TODO: throw exception
+                    throw new Exception();
+                }
+            }
+
+            private void IndexConstructors(IEnumerable<IPageElementConstructor<TPageElem, TGroup, TPage>> constructors)
+            {
+                foreach (var constr in constructors)
+                {
+                    DataTypeAttribute dataTypeAtt;
+                    if (constr.GetType().TryGetAttribute(out dataTypeAtt))
+                    {
+                        if (!ContainsKey(dataTypeAtt.Type))
+                        {
+                            Add(dataTypeAtt.Type, constr);
+                        }
+                        else
+                        {
+                            //TODO: throw exception
+                        }
+                    }
+                    else
+                    {
+                        //TODO: throw exception
+                    }
+                }
+            }
+        }
+
         private readonly IDataModelBinder m_DataBinder;
         private readonly IPageConstructor<TPage> m_PageConstructor;
-        private readonly IDictionary<Type, IGroupConstructor<TGroup, TPage>> m_GroupConstructors;
-        private readonly IDictionary<Type, IControlConstructor<TControl, TPage, TGroup>> m_ControlConstructors;
+
+        //
+        //private readonly IDictionary<Type, IGroupConstructor<TGroup, TPage>> m_GroupConstructors1;
+        //private readonly IDictionary<Type, IControlConstructor<TControl, TGroup, TPage>> m_ControlConstructors1;
+        //
+
+        private readonly ConstructorsIndex<TGroup> m_GroupConstructors;
+        private readonly ConstructorsIndex<IControl> m_ControlConstructors;
 
         //private Dictionary<IControl, IBinding<TDataModel>> m_Bindings;
 
@@ -30,13 +87,15 @@ namespace Xarial.VPages.Core
         public PageBuilder(IDataModelBinder dataBinder,
             IPageConstructor<TPage> pageConstr,
             IGroupConstructor<TGroup, TPage>[] groupConstrs,
-            IControlConstructor<TControl, TPage, TGroup>[] ctrlsContstrs)
+            IControlConstructor<IControl, TGroup, TPage>[] ctrlsContstrs)
         {
             m_DataBinder = dataBinder;
             m_PageConstructor = pageConstr;
-            m_GroupConstructors = IndexConstructors(groupConstrs);
-            m_ControlConstructors = IndexConstructors(ctrlsContstrs);
+            //m_GroupConstructors = IndexConstructors(groupConstrs);
+            //m_ControlConstructors = IndexConstructors(ctrlsContstrs);
 
+            m_GroupConstructors = new ConstructorsIndex<TGroup>(groupConstrs);
+            m_ControlConstructors = new ConstructorsIndex<IControl>(ctrlsContstrs);
             //m_Bindings = new Dictionary<IControl, IBinding<TDataModel>>();
 
             //BuildPage();
@@ -56,50 +115,57 @@ namespace Xarial.VPages.Core
 
         //    return m_Page;
         //}
+        
 
-        public TPage CreatePage(object model)
+        public TPage CreatePage<TModel>(TModel model)
         {
             TPage page = default(TPage);
-
+            
             var bindingGrp = m_DataBinder.Bind(model,
+                (DataModelInfo info) => 
+                {
+                    page = m_PageConstructor.Create(info.Attributes);
+                    return page;
+                },
                 (DataModelInfo info, IGroup parent) =>
                 {
                     IControl ctrl = null;
 
-                    if (parent == null)
+                    //TGroup parentGrp = default(TGroup);
+                    //IPageElementConstructor<IPageElement, IGroup, TPage> constr = null;
+                    //IConstructor constr = null;
+
+                    if (info.IsGroup)
                     {
-                        page = m_PageConstructor.Create(info.Attributes);
-                        ctrl = page;
+                        var constr = m_GroupConstructors.FindConstructor(info.Type);
+                        //.Create(page, parentGrp, info.Attributes);
+                        if (parent is TGroup)
+                        {
+                            ctrl = constr.Create((TGroup)parent, info.Attributes);
+                        }
+                        else if (parent is TPage)
+                        {
+                            ctrl = constr.Create((TPage)parent, info.Attributes);
+                        }
                     }
                     else
                     {
-                        TGroup parentGrp = default(TGroup);
-
+                        var constr = m_ControlConstructors.FindConstructor(info.Type);
                         if (parent is TGroup)
                         {
-                            parentGrp = (TGroup)parent;
+                            ctrl = constr.Create((TGroup)parent, info.Attributes);
                         }
-                        else
+                        else if (parent is TPage)
                         {
-                            //throw
+                            ctrl = constr.Create((TPage)parent, info.Attributes);
                         }
-
-                        if (info.IsGroup)
-                        {
-                            ctrl = FindConstructor(m_GroupConstructors, info.Type)
-                                .Create(page, parentGrp, info.Attributes);
-                        }
-                        else
-                        {
-                            ctrl = FindConstructor(m_ControlConstructors, info.Type)
-                                .Create(page, parentGrp, info.Attributes);
-                        }
+                        //.Create(page, parentGrp, info.Attributes);
                     }
 
                     return ctrl;
                 });
 
-            page.Binding.CopyFrom(bindingGrp);
+            page.Binding.Load(bindingGrp);
 
             return page;
         }
@@ -151,54 +217,55 @@ namespace Xarial.VPages.Core
         //    m_Bindings[sender].SetValueToData(newValue, m_CurrentDataModel);
         //}
 
-        private IDictionary<Type, TConstructor> IndexConstructors<TConstructor>(IEnumerable<TConstructor> constructors)
-            where TConstructor : IConstructor
-        {
-            var index = new Dictionary<Type, TConstructor>();
+        //private IDictionary<Type, TConstructor> IndexConstructors<TConstructor>(IEnumerable<TConstructor> constructors)
+        //    where TConstructor : IConstructor
+        //{
+        //    var index = new Dictionary<Type, TConstructor>();
 
-            foreach (var constr in constructors)
-            {
-                DataTypeAttribute dataTypeAtt;
-                if (constr.GetType().TryGetAttribute(out dataTypeAtt))
-                {
-                    if (!index.ContainsKey(dataTypeAtt.Type))
-                    {
-                        index.Add(dataTypeAtt.Type, constr);
-                    }
-                    else
-                    {
-                        //TODO: throw exception
-                    }
-                }
-                else
-                {
-                    //TODO: throw exception
-                }
-            }
+        //    foreach (var constr in constructors)
+        //    {
+        //        DataTypeAttribute dataTypeAtt;
+        //        if (constr.GetType().TryGetAttribute(out dataTypeAtt))
+        //        {
+        //            if (!index.ContainsKey(dataTypeAtt.Type))
+        //            {
+        //                index.Add(dataTypeAtt.Type, constr);
+        //            }
+        //            else
+        //            {
+        //                //TODO: throw exception
+        //            }
+        //        }
+        //        else
+        //        {
+        //            //TODO: throw exception
+        //        }
+        //    }
 
-            return index;
-        }
+        //    return index;
+        //}
 
-        private TConstructor FindConstructor<TConstructor>(IDictionary<Type, TConstructor> index, Type type)
-            where TConstructor : IConstructor
-        {
-            TConstructor constr;
+        //private IPageElementConstructor<TPageElem, TGroup, TPage> FindConstructor<TPageElem>(
+        //    IDictionary<Type, IPageElementConstructor<TPageElem, TGroup, TPage>> index, Type type)
+        //    where TPageElem : IPageElement
+        //{
+        //    IPageElementConstructor<TPageElem, TGroup, TPage> constr;
+            
+        //    if (!index.TryGetValue(type, out constr))
+        //    {
+        //        constr = index.FirstOrDefault(t => type.IsAssignableFrom(type)).Value;
+        //    }
 
-            if (!index.TryGetValue(type, out constr))
-            {
-                constr = index.FirstOrDefault(t => type.IsAssignableFrom(type)).Value;
-            }
-
-            if (constr != null)
-            {
-                return constr;
-            }
-            else
-            {
-                //TODO: throw exception
-                throw new Exception();
-            }
-        }
+        //    if (constr != null)
+        //    {
+        //        return constr;
+        //    }
+        //    else
+        //    {
+        //        //TODO: throw exception
+        //        throw new Exception();
+        //    }
+        //}
 
         //public void LoadPage(TDataModel data)
         //{

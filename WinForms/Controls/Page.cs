@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Xarial.VPages.Core;
+using Xarial.VPages.Core.Base;
 
 namespace Xarial.VPages.WinForms
 {
-    public class Page : BasePage
+    public class FormPage : Page
     {
         internal Form Form { get; private set; }
         internal FlowLayoutPanel Panel { get; private set; }
 
-        internal Page()
+        internal FormPage()
         {
             Form = new Form();
             Panel = new FlowLayoutPanel();
@@ -20,5 +21,15 @@ namespace Xarial.VPages.WinForms
             Panel.Dock = DockStyle.Fill;
             Form.Controls.Add(Panel);
         }
+
+        //private BindingGroup m_Binding;
+
+        //public BindingGroup Binding
+        //{
+        //    get
+        //    {
+        //        return m_Binding ?? (m_Binding = new BindingGroup());
+        //    }
+        //}
     }
 }

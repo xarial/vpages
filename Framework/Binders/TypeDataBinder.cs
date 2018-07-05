@@ -61,21 +61,21 @@ namespace Xarial.VPages.Core.Parsers
             return null;
         }
 
-        public BindingGroup Bind(object model, BindToControlDelegate ctrlCreator)
+        public BindingGroup Bind(object model, CreatePageDelegate pageCreator, BindToControlDelegate ctrlCreator)
         {
             var type = model.GetType();
 
             var bindings = new List<IBinding>();
 
-            var page = ctrlCreator.Invoke(
-                    new DataModelInfo(type.Name, type, true, GetAttributeSet(type)), null);
+            var page = pageCreator.Invoke(
+                    new DataModelInfo(type.Name, type, true, GetAttributeSet(type)));
 
             if (!(page is IPage))
             {
                 //throw
             }
 
-            TraverseType(model.GetType(), model, new List<PropertyInfo>(), ctrlCreator, page as IPage, bindings);
+            TraverseType(model.GetType(), model, new List<PropertyInfo>(), ctrlCreator, page as IGroup, bindings);
 
             return new BindingGroup(bindings);
         }
