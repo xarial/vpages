@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Xarial.VPages.Framework.Base;
 
-namespace Xarial.VPages.Core
+namespace Xarial.VPages.Framework.Core
 {
     public class AttributeSet
     {

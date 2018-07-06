@@ -3,25 +3,27 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using Xarial.VPages.Core.Attributes;
-using Xarial.VPages.Core.Base;
-using Xarial.VPages.Core.Constructors;
+using Xarial.VPages.Framework.Attributes;
+using Xarial.VPages.Framework.Base;
+using Xarial.VPages.Framework.Constructors;
+using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.Core
 {
-    public class PageBuilder<TPage, TGroup>
+    public class PageBuilder<TPage, TGroup, TControl>
         where TPage : IPage
         where TGroup : IGroup
+        where TControl : IControl
     {
-        private class ConstructorsIndex<TPageElem> : Dictionary<Type, IPageElementConstructor<TPageElem, TGroup, TPage>>
-            where TPageElem : IPageElement
+        private class ConstructorsContainer<TPageElem> : Dictionary<Type, IPageElementConstructor<TPageElem, TGroup, TPage>>
+            where TPageElem : IControl
         {
-            internal ConstructorsIndex(IEnumerable<IPageElementConstructor<TPageElem, TGroup, TPage>> constructors)
+            internal ConstructorsContainer(IEnumerable<IPageElementConstructor<TPageElem, TGroup, TPage>> constructors)
             {
                 IndexConstructors(constructors);
             }
 
-            internal IPageElementConstructor<TPageElem, TGroup, TPage> FindConstructor(Type type)
+            private IPageElementConstructor<TPageElem, TGroup, TPage> FindConstructor(Type type)
             {
                 IPageElementConstructor<TPageElem, TGroup, TPage> constr;
 
@@ -41,11 +43,30 @@ namespace Xarial.VPages.Core
                 }
             }
 
+            internal TPageElem CreateElement(Type type, IGroup parent, AttributeSet atts)
+            {
+                var constr = FindConstructor(type);
+
+                if (parent is TPage)
+                {
+                    return constr.Create((TPage)parent, atts);
+                }
+                else if (parent is TGroup)
+                {
+                    return constr.Create((TGroup)parent, atts);
+                }
+                else
+                {
+                    //TODO: throw
+                    throw new Exception();
+                }
+            }
+
             private void IndexConstructors(IEnumerable<IPageElementConstructor<TPageElem, TGroup, TPage>> constructors)
             {
                 foreach (var constr in constructors)
                 {
-                    DataTypeAttribute dataTypeAtt;
+                    DefaultTypeAttribute dataTypeAtt;
                     if (constr.GetType().TryGetAttribute(out dataTypeAtt))
                     {
                         if (!ContainsKey(dataTypeAtt.Type))
@@ -73,8 +94,8 @@ namespace Xarial.VPages.Core
         //private readonly IDictionary<Type, IControlConstructor<TControl, TGroup, TPage>> m_ControlConstructors1;
         //
 
-        private readonly ConstructorsIndex<TGroup> m_GroupConstructors;
-        private readonly ConstructorsIndex<IControl> m_ControlConstructors;
+        private readonly ConstructorsContainer<TGroup> m_GroupConstructors;
+        private readonly ConstructorsContainer<TControl> m_ControlConstructors;
 
         //private Dictionary<IControl, IBinding<TDataModel>> m_Bindings;
 
@@ -87,15 +108,15 @@ namespace Xarial.VPages.Core
         public PageBuilder(IDataModelBinder dataBinder,
             IPageConstructor<TPage> pageConstr,
             IGroupConstructor<TGroup, TPage>[] groupConstrs,
-            IControlConstructor<IControl, TGroup, TPage>[] ctrlsContstrs)
+            IControlConstructor<TControl, TGroup, TPage>[] ctrlsContstrs)
         {
             m_DataBinder = dataBinder;
             m_PageConstructor = pageConstr;
             //m_GroupConstructors = IndexConstructors(groupConstrs);
             //m_ControlConstructors = IndexConstructors(ctrlsContstrs);
 
-            m_GroupConstructors = new ConstructorsIndex<TGroup>(groupConstrs);
-            m_ControlConstructors = new ConstructorsIndex<IControl>(ctrlsContstrs);
+            m_GroupConstructors = new ConstructorsContainer<TGroup>(groupConstrs);
+            m_ControlConstructors = new ConstructorsContainer<TControl>(ctrlsContstrs);
             //m_Bindings = new Dictionary<IControl, IBinding<TDataModel>>();
 
             //BuildPage();
@@ -137,29 +158,11 @@ namespace Xarial.VPages.Core
 
                     if (info.IsGroup)
                     {
-                        var constr = m_GroupConstructors.FindConstructor(info.Type);
-                        //.Create(page, parentGrp, info.Attributes);
-                        if (parent is TGroup)
-                        {
-                            ctrl = constr.Create((TGroup)parent, info.Attributes);
-                        }
-                        else if (parent is TPage)
-                        {
-                            ctrl = constr.Create((TPage)parent, info.Attributes);
-                        }
+                        ctrl = m_GroupConstructors.CreateElement(info.Type, parent, info.Attributes);
                     }
                     else
                     {
-                        var constr = m_ControlConstructors.FindConstructor(info.Type);
-                        if (parent is TGroup)
-                        {
-                            ctrl = constr.Create((TGroup)parent, info.Attributes);
-                        }
-                        else if (parent is TPage)
-                        {
-                            ctrl = constr.Create((TPage)parent, info.Attributes);
-                        }
-                        //.Create(page, parentGrp, info.Attributes);
+                        ctrl = m_ControlConstructors.CreateElement(info.Type, parent, info.Attributes);
                     }
 
                     return ctrl;

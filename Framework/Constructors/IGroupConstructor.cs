@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Xarial.VPages.Framework.Base;
 
-namespace Xarial.VPages.Core.Constructors
+namespace Xarial.VPages.Framework.Constructors
 {
     public interface IGroupConstructor<TGroup, TPage> : IPageElementConstructor<TGroup, TGroup, TPage>
         where TGroup : IGroup
         where TPage : IPage
     {
-        //TGroup Create(TPage page, AttributeSet atts);
-        //TGroup Create(TGroup group, AttributeSet atts);
     }
 }

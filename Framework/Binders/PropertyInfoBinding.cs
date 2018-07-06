@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Xarial.VPages.Framework.Base;
+using Xarial.VPages.Framework.Core;
 
-namespace Xarial.VPages.Core.Binders
+namespace Xarial.VPages.Framework.Binders
 {
     public class PropertyInfoBinding : Binding
     {
@@ -18,27 +20,7 @@ namespace Xarial.VPages.Core.Binders
         {
             m_PrpInfo = prpInfo;
             m_Parents = parents;
-
-            //Type = prpInfo.PropertyType;
-            //Name = prpInfo.Name;
-            //IsGroup = isGroup;
         }
-
-        //public object GetValueFromControl()
-        //{
-        //    return Control.GetValue();
-        //}
-
-        //public object GetValueFromData(TDataModel model)
-        //{
-        //    var curModel = GetCurrentModel(model);
-        //    return m_PrpInfo.GetValue(curModel, null);
-        //}
-
-        //public void SetValueToControl(object value)
-        //{
-        //    Control.SetValue(value);
-        //}
         
         public override void UpdateDataModel()
         {

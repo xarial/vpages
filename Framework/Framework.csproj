@@ -7,8 +7,8 @@
     <ProjectGuid>{B7074539-E584-4A73-A505-D239DE9376DC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xarial.VPages.Core</RootNamespace>
-    <AssemblyName>Xarial.VPages.Core</AssemblyName>
+    <RootNamespace>Xarial.VPages.Framework</RootNamespace>
+    <AssemblyName>Xarial.VPages.Framework</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,15 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\DataTypeAttribute.cs" />
-    <Compile Include="Base\BindingGroup.cs" />
-    <Compile Include="Base\DataModelInfo.cs" />
+    <Compile Include="Attributes\DefaultTypeAttribute.cs" />
     <Compile Include="Binders\PropertyInfoBinding.cs" />
-    <Compile Include="Constructors\IConstructor.cs" />
+    <Compile Include="Constructors\IPageElementConstructor.cs" />
     <Compile Include="Constructors\IGroupConstructor.cs" />
     <Compile Include="Constructors\IControlConstructor.cs" />
     <Compile Include="Base\IAttribute.cs" />
-    <Compile Include="Base\AttributeSet.cs" />
     <Compile Include="Base\IBinding.cs" />
     <Compile Include="Base\IControl.cs" />
     <Compile Include="Base\IDataBinder.cs" />
@@ -55,6 +52,13 @@
     <Compile Include="Base\IPage.cs" />
     <Compile Include="Constructors\IPageConstructor.cs" />
     <Compile Include="Attributes\SupportsAttributesAttribute.cs" />
+    <Compile Include="Core\AttributeSet.cs" />
+    <Compile Include="Core\Binding.cs" />
+    <Compile Include="Core\BindingGroup.cs" />
+    <Compile Include="Core\Control.cs" />
+    <Compile Include="Core\DataModelInfo.cs" />
+    <Compile Include="Core\Group.cs" />
+    <Compile Include="Core\Page.cs" />
     <Compile Include="PageBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Binders\TypeDataBinder.cs" />

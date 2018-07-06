@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Xarial.VPages.Core;
+using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.WinForms
 {

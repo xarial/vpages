@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Xarial.VPages.Core.Attributes
+namespace Xarial.VPages.Framework.Attributes
 {
-    //DefaultTypeAttribute
-    public class DataTypeAttribute : Attribute
+    public class DefaultTypeAttribute : Attribute
     {
         public Type Type { get; private set; }
         
-        public DataTypeAttribute(Type type)
+        public DefaultTypeAttribute(Type type)
         {
             Type = type;
         }

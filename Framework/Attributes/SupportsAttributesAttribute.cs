@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Xarial.VPages.Core
+namespace Xarial.VPages.Framework.Attributes
 {
     public class SupportsAttributesAttribute : Attribute
     {

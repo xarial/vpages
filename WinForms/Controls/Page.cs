@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Xarial.VPages.Core;
-using Xarial.VPages.Core.Base;
+using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.WinForms
 {
@@ -21,15 +21,5 @@ namespace Xarial.VPages.WinForms
             Panel.Dock = DockStyle.Fill;
             Form.Controls.Add(Panel);
         }
-
-        //private BindingGroup m_Binding;
-
-        //public BindingGroup Binding
-        //{
-        //    get
-        //    {
-        //        return m_Binding ?? (m_Binding = new BindingGroup());
-        //    }
-        //}
     }
 }

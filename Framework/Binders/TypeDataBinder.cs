@@ -3,24 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Xarial.VPages.Core.Base;
-using Xarial.VPages.Core.Binders;
+using Xarial.VPages.Framework.Base;
+using Xarial.VPages.Framework.Core;
 
-namespace Xarial.VPages.Core.Parsers
+namespace Xarial.VPages.Framework.Binders
 {
     public class TypeDataBinder : IDataModelBinder
     {
-        //public event BindToPage<TDataModel> BindToPage;
-        //public event BindToControlDelegate<TDataModel> BindToControl;
-        
-        //public void Init()
-        //{
-        //    var binding = new RootBinding<TDataModel>(typeof(TDataModel));
-        //    binding.Control = BindToPage?.Invoke(binding, GetAttributeSet(typeof(TDataModel)));
-
-        //    TraverseType(typeof(TDataModel), new List<PropertyInfo>(), null);
-        //}
-
         private void TraverseType(Type type, object model, List<PropertyInfo> parents,
             BindToControlDelegate ctrlCreator, IGroup parentCtrl, List<IBinding> bindings)
         {
@@ -35,8 +24,7 @@ namespace Xarial.VPages.Core.Parsers
 
                 var binding = new PropertyInfoBinding(model, ctrl, prp, parents);
                 bindings.Add(binding);
-                //binding.Control = BindToControl?.Invoke(binding, parentBinding, GetAttributeSet(prp));
-
+                
                 if (isGroup)
                 {
                     if (!(ctrl is IGroup))

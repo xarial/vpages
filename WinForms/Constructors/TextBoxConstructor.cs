@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Xarial.VPages.Core;
-using Xarial.VPages.Core.Attributes;
-using Xarial.VPages.Core.Constructors;
+using Xarial.VPages.Framework.Attributes;
+using Xarial.VPages.Framework.Constructors;
+using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.WinForms
 {
-    [DataType(typeof(string))]
+    [DefaultType(typeof(string))]
     public class TextBoxConstructor : IControlConstructor<TextBoxControl, FormGroup, FormPage>
     {
         public TextBoxControl Create(FormPage page, AttributeSet atts)
