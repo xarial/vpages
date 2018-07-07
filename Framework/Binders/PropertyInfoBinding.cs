@@ -8,13 +8,13 @@ using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.Framework.Binders
 {
-    public class PropertyInfoBinding : Binding
+    public class PropertyInfoBinding<TDataModel> : Binding<TDataModel>
     {
         private IList<PropertyInfo> m_Parents;
 
         private PropertyInfo m_PrpInfo;
 
-        internal PropertyInfoBinding(object dataModel, IControl control,
+        internal PropertyInfoBinding(TDataModel dataModel, IControl control,
             PropertyInfo prpInfo, IList<PropertyInfo> parents)
             : base(control, dataModel)
         {

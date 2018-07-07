@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using Xarial.VPages.Framework.Base;
-using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.Framework.Binders
 {
     public class TypeDataBinder : IDataModelBinder
     {
-        private void TraverseType(Type type, object model, List<PropertyInfo> parents,
-            BindToControlDelegate ctrlCreator, IGroup parentCtrl, List<IBinding> bindings)
+        private void TraverseType<TDataModel>(Type type, TDataModel model, List<PropertyInfo> parents,
+            CreateBindingControlDelegate ctrlCreator, CreateBindingGroupDelegate grpCreator,
+            IGroup parentCtrl, List<IBinding> bindings)
         {
             foreach (var prp in type.GetProperties())
             {
@@ -19,53 +17,50 @@ namespace Xarial.VPages.Framework.Binders
 
                 var isGroup = !(prpType.IsPrimitive || prpType.IsEnum || prpType == typeof(string) || prpType == typeof(decimal));
 
-                var ctrl = ctrlCreator.Invoke(
-                    new DataModelInfo(prp.Name, prpType, isGroup, GetAttributeSet(prp)), parentCtrl);
+                IControl ctrl;
 
-                var binding = new PropertyInfoBinding(model, ctrl, prp, parents);
-                bindings.Add(binding);
-                
                 if (isGroup)
                 {
-                    if (!(ctrl is IGroup))
-                    {
-                        //throw
-                    }
+                    var grp = grpCreator.Invoke(prpType, GetAttributeSet(prp), parentCtrl);
+                    ctrl = grp;
 
                     var grpParents = new List<PropertyInfo>(parents);
                     grpParents.Add(prp);
-                    TraverseType(prpType, model, grpParents, ctrlCreator, ctrl as IGroup, bindings);
+                    TraverseType(prpType, model, grpParents, ctrlCreator, grpCreator, grp, bindings);
                 }
+                else
+                {
+                    ctrl = ctrlCreator.Invoke(prpType, GetAttributeSet(prp), parentCtrl);
+                }
+
+                var binding = new PropertyInfoBinding<TDataModel>(model, ctrl, prp, parents);
+                bindings.Add(binding);
             }
         }
 
-        private AttributeSet GetAttributeSet(PropertyInfo prp)
+        private IAttributeSet GetAttributeSet(PropertyInfo prp)
         {
             return null;
         }
 
-        private AttributeSet GetAttributeSet(Type type)
+        private IAttributeSet GetAttributeSet(Type type)
         {
             return null;
         }
 
-        public BindingGroup Bind(object model, CreatePageDelegate pageCreator, BindToControlDelegate ctrlCreator)
+        public void Bind<TDataModel>(TDataModel model, CreateBindingPageDelegate pageCreator,
+            CreateBindingControlDelegate ctrlCreator, CreateBindingGroupDelegate grpCreator,
+            out IEnumerable<IBinding> bindings)
         {
             var type = model.GetType();
 
-            var bindings = new List<IBinding>();
+            var bindingsList = new List<IBinding>();
+            bindings = bindingsList;
 
-            var page = pageCreator.Invoke(
-                    new DataModelInfo(type.Name, type, true, GetAttributeSet(type)));
+            var page = pageCreator.Invoke(GetAttributeSet(type));
 
-            if (!(page is IPage))
-            {
-                //throw
-            }
-
-            TraverseType(model.GetType(), model, new List<PropertyInfo>(), ctrlCreator, page as IGroup, bindings);
-
-            return new BindingGroup(bindings);
+            TraverseType(model.GetType(), model, new List<PropertyInfo>(), 
+                ctrlCreator, grpCreator, page, bindingsList);
         }
     }
 }

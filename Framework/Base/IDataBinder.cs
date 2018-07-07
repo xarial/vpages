@@ -6,11 +6,14 @@ using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.Framework.Base
 {
-    public delegate IControl BindToControlDelegate(DataModelInfo info, IGroup parent);
-    public delegate IPage CreatePageDelegate(DataModelInfo info);
+    public delegate IControl CreateBindingControlDelegate(Type dataType, IAttributeSet atts, IGroup parent);
+    public delegate IGroup CreateBindingGroupDelegate(Type dataType, IAttributeSet atts, IGroup parent);
+    public delegate IPage CreateBindingPageDelegate(IAttributeSet atts);
 
     public interface IDataModelBinder
     {
-        BindingGroup Bind(object model, CreatePageDelegate pageCreator, BindToControlDelegate ctrlCreator);
+        void Bind<TDataModel>(TDataModel model, CreateBindingPageDelegate pageCreator,
+            CreateBindingControlDelegate ctrlCreator, CreateBindingGroupDelegate grpCreator,
+            out IEnumerable<IBinding> bindings);
     }
 }

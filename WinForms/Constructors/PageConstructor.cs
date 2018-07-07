@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xarial.VPages.Core;
 using Xarial.VPages.Framework.Constructors;
-using Xarial.VPages.Framework.Core;
+using Xarial.VPages.Framework.Base;
 
 namespace Xarial.VPages.WinForms
 {
     public class FormPageConstructor : IPageConstructor<FormPage>
     {
-        public FormPage Create(AttributeSet atts)
+        public FormPage Create(IAttributeSet atts)
         {
             return new FormPage();
         }

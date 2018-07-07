@@ -9,7 +9,9 @@ namespace Xarial.VPages.Framework.Core
 {
     public abstract class Group<TVal> : Control<TVal>, IGroup
     {
+#pragma warning disable CS0067
         protected override event ControlValueChangedDelegate<TVal> ValueChanged;
+#pragma warning restore CS0067
 
         protected override TVal GetValue()
         {

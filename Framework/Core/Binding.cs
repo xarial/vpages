@@ -7,13 +7,13 @@ using Xarial.VPages.Framework.Base;
 
 namespace Xarial.VPages.Framework.Core
 {
-    public abstract class Binding : IBinding
+    public abstract class Binding<TDataModel> : IBinding
     {
         protected IControl Control { get; private set; }
 
-        protected object DataModel { get; private set; }
+        protected TDataModel DataModel { get; private set; }
 
-        public Binding(IControl control, object dataModel)
+        public Binding(IControl control, TDataModel dataModel)
         {
             DataModel = dataModel;
             Control = control;

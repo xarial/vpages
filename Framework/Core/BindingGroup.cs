@@ -9,19 +9,15 @@ namespace Xarial.VPages.Framework.Core
 {
     public class BindingGroup : ReadOnlyCollection<IBinding>
     {
-        internal BindingGroup(IList<IBinding> bindings) : base(bindings)
-        {
-        }
-
         public BindingGroup() : base(new List<IBinding>())
         {
         }
 
-        internal void Load(BindingGroup grp)
+        internal void Load(IEnumerable<IBinding> bindings)
         {
             this.Items.Clear();
 
-            foreach (var bind in grp)
+            foreach (var bind in bindings)
             {
                 this.Items.Add(bind);
             }

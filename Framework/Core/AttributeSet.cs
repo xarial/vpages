@@ -6,7 +6,7 @@ using Xarial.VPages.Framework.Base;
 
 namespace Xarial.VPages.Framework.Core
 {
-    public class AttributeSet
+    public class AttributeSet : IAttributeSet
     {
         public int Id { get; private set; }
         public string Name { get; private set; }

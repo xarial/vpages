@@ -12,7 +12,7 @@ namespace Xarial.VPages.Framework.Constructors
         where TPage : IPage
         where TElem : IControl
     {
-        TElem Create(TPage page, AttributeSet atts);
-        TElem Create(TGroup group, AttributeSet atts);
+        TElem Create(TPage page, IAttributeSet atts);
+        TElem Create(TGroup group, IAttributeSet atts);
     }
 }
