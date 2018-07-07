@@ -21,13 +21,13 @@ namespace Xarial.VPages.Core
 
         public PageBuilder(IDataModelBinder dataBinder,
             IPageConstructor<TPage> pageConstr,
-            IGroupConstructor<TGroup, TPage>[] groupConstrs,
+            IGroupConstructor<TGroup, TPage> groupConstr,
             IControlConstructor<TControl, TGroup, TPage>[] ctrlsContstrs)
         {
             m_DataBinder = dataBinder;
             m_PageConstructor = pageConstr;
 
-            m_GroupConstructors = new ConstructorsContainer<TGroup, TPage, TGroup>(groupConstrs);
+            m_GroupConstructors = new ConstructorsContainer<TGroup, TPage, TGroup>(groupConstr);
             m_ControlConstructors = new ConstructorsContainer<TControl, TPage, TGroup>(ctrlsContstrs);
         }
         

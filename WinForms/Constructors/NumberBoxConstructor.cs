@@ -7,6 +7,7 @@ using Xarial.VPages.Framework.Attributes;
 using Xarial.VPages.Framework.Base;
 using Xarial.VPages.Framework.Constructors;
 using Xarial.VPages.Framework.Core;
+using Xarial.VPages.WinForms.Constructors;
 
 namespace Xarial.VPages.WinForms
 {
@@ -15,18 +16,18 @@ namespace Xarial.VPages.WinForms
     {
         public NumberBoxControl Create(FormPage page, IAttributeSet atts)
         {
-            return CreateControl(page.Panel.Controls);
+            return CreateControl(page.Layout, atts);
         }
-
+        
         public NumberBoxControl Create(FormGroup group, IAttributeSet atts)
         {
-            return null;
+            return CreateControl(group.Layout, atts);
         }
 
-        private NumberBoxControl CreateControl(System.Windows.Forms.Control.ControlCollection ctrls)
+        private NumberBoxControl CreateControl(LayoutControl layout, IAttributeSet atts)
         {
             var ctrl = new NumberBoxControl();
-            ctrls.Add(ctrl.NumberBox);
+            layout.AddControl(ctrl.Control);
             return ctrl;
         }
     }

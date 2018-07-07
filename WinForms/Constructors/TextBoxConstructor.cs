@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xarial.VPages.Core;
-using Xarial.VPages.Framework.Attributes;
+﻿using Xarial.VPages.Framework.Attributes;
 using Xarial.VPages.Framework.Base;
 using Xarial.VPages.Framework.Constructors;
-using Xarial.VPages.Framework.Core;
+using Xarial.VPages.WinForms.Constructors;
 
 namespace Xarial.VPages.WinForms
 {
@@ -15,18 +10,18 @@ namespace Xarial.VPages.WinForms
     {
         public TextBoxControl Create(FormPage page, IAttributeSet atts)
         {
-            return CreateControl(page.Panel.Controls);
+            return CreateControl(page.Layout, atts);
         }
 
         public TextBoxControl Create(FormGroup group, IAttributeSet atts)
         {
-            throw new NotImplementedException();
+            return CreateControl(group.Layout, atts);
         }
 
-        private TextBoxControl CreateControl(System.Windows.Forms.Control.ControlCollection ctrls)
+        private TextBoxControl CreateControl(LayoutControl layout, IAttributeSet atts)
         {
             var ctrl = new TextBoxControl();
-            ctrls.Add(ctrl.TextBox);
+            layout.AddControl(ctrl.Control);
             return ctrl;
         }
     }

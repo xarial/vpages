@@ -54,6 +54,7 @@
     <Compile Include="Base\IPage.cs" />
     <Compile Include="Constructors\IPageConstructor.cs" />
     <Compile Include="Attributes\SupportsAttributesAttribute.cs" />
+    <Compile Include="Core\AnyType.cs" />
     <Compile Include="Core\AttributeSet.cs" />
     <Compile Include="Core\Binding.cs" />
     <Compile Include="Core\BindingGroup.cs" />

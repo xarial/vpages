@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constructors\LayoutControl.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\Group.cs" />
     <Compile Include="Constructors\GroupConstructor.cs" />

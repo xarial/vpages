@@ -12,27 +12,29 @@ namespace Xarial.VPages.WinForms
     {
         protected override event ControlValueChangedDelegate<string> ValueChanged;
 
-        internal TextBox TextBox { get; private set; }
+        private TextBox m_TextBox;
+
+        internal override Control Control => m_TextBox;
 
         internal TextBoxControl()
         {
-            TextBox = new TextBox();
-            TextBox.TextChanged += OnTextChanged;
+            m_TextBox = new TextBox();
+            m_TextBox.TextChanged += OnTextChanged;
         }
 
         private void OnTextChanged(object sender, EventArgs e)
         {
-            ValueChanged.Invoke(this, TextBox.Text);
+            ValueChanged.Invoke(this, m_TextBox.Text);
         }
 
         protected override string GetValue()
         {
-            return TextBox.Text;
+            return m_TextBox.Text;
         }
 
         protected override void SetValue(string value)
         {
-            TextBox.Text = value as string;
+            m_TextBox.Text = value as string;
         }
     }
 }

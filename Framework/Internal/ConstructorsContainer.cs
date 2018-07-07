@@ -5,6 +5,7 @@ using System.Text;
 using Xarial.VPages.Framework.Attributes;
 using Xarial.VPages.Framework.Base;
 using Xarial.VPages.Framework.Constructors;
+using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.Framework.Internal
 {
@@ -14,7 +15,9 @@ namespace Xarial.VPages.Framework.Internal
         where TPage : IPage
         where TGroup : IGroup
     {
-        internal ConstructorsContainer(IEnumerable<IPageElementConstructor<TOutPageElem, TGroup, TPage>> constructors)
+        private IPageElementConstructor<TOutPageElem, TGroup, TPage> m_GenericConstructor;
+
+        internal ConstructorsContainer(params IPageElementConstructor<TOutPageElem, TGroup, TPage>[] constructors)
         {
             IndexConstructors(constructors);
         }
@@ -25,7 +28,13 @@ namespace Xarial.VPages.Framework.Internal
 
             if (!TryGetValue(type, out constr))
             {
-                constr = this.FirstOrDefault(t => type.IsAssignableFrom(type)).Value;
+                constr = this.FirstOrDefault(
+                    t => type.IsAssignableFrom(type)).Value;
+
+                if (constr == null)
+                {
+                    constr = m_GenericConstructor;
+                }
             }
 
             if (constr != null)
@@ -57,7 +66,7 @@ namespace Xarial.VPages.Framework.Internal
                 throw new Exception();
             }
         }
-
+        
         private void IndexConstructors(IEnumerable<IPageElementConstructor<TOutPageElem, TGroup, TPage>> constructors)
         {
             foreach (var constr in constructors)
@@ -65,13 +74,27 @@ namespace Xarial.VPages.Framework.Internal
                 DefaultTypeAttribute dataTypeAtt;
                 if (constr.GetType().TryGetAttribute(out dataTypeAtt))
                 {
-                    if (!ContainsKey(dataTypeAtt.Type))
+                    var type = dataTypeAtt.Type;
+
+                    if (type == typeof(AnyType))
                     {
-                        Add(dataTypeAtt.Type, constr);
+                        if (m_GenericConstructor != null)
+                        {
+                            //throw exception - duplicate generic constructor
+                        }
+
+                        m_GenericConstructor = constr;
                     }
                     else
                     {
-                        //TODO: throw exception
+                        if (!ContainsKey(dataTypeAtt.Type))
+                        {
+                            Add(dataTypeAtt.Type, constr);
+                        }
+                        else
+                        {
+                            //TODO: throw exception
+                        }
                     }
                 }
                 else

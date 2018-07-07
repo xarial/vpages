@@ -10,9 +10,22 @@ namespace WinFormsTests
     {
         public class DataModelMock1
         {
+            public class GroupMock1
+            {
+                public string GroupTextField1 { get; set; }
+                public string GroupTextField2 { get; set; }
+                public decimal NumberField1 { get; set; }
+                public decimal NumberField2 { get; set; }
+                public decimal NumberField3 { get; set; }
+                public string GroupTextField4 { get; set; }
+                public string GroupTextField5 { get; set; }
+            }
+
             public string TextField { get; set; }
 
             public decimal NumberField { get; set; }
+
+            public GroupMock1 Group { get; set; }
         }
 
         [TestMethod]

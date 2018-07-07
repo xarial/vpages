@@ -12,12 +12,14 @@ namespace Xarial.VPages.WinForms
     {
         protected override event ControlValueChangedDelegate<decimal> ValueChanged;
 
-        internal NumericUpDown NumberBox { get; private set; }
+        private NumericUpDown m_NumberBox;
+
+        internal override Control Control => m_NumberBox;
 
         internal NumberBoxControl()
         {
-            NumberBox = new NumericUpDown();
-            NumberBox.ValueChanged += OnNumberBoxValueChanged;
+            m_NumberBox = new NumericUpDown();
+            m_NumberBox.ValueChanged += OnNumberBoxValueChanged;
         }
 
         private void OnNumberBoxValueChanged(object sender, EventArgs e)
@@ -27,12 +29,12 @@ namespace Xarial.VPages.WinForms
 
         protected override decimal GetValue()
         {
-            return NumberBox.Value;
+            return m_NumberBox.Value;
         }
 
         protected override void SetValue(decimal value)
         {
-            NumberBox.Value = (decimal)value;
+            m_NumberBox.Value = (decimal)value;
         }
     }
 }
