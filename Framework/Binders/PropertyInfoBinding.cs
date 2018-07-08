@@ -12,13 +12,13 @@ namespace Xarial.VPages.Framework.Binders
     {
         private IList<PropertyInfo> m_Parents;
 
-        private PropertyInfo m_PrpInfo;
+        internal PropertyInfo Property { get; private set; }
 
         internal PropertyInfoBinding(TDataModel dataModel, IControl control,
             PropertyInfo prpInfo, IList<PropertyInfo> parents)
             : base(control, dataModel)
         {
-            m_PrpInfo = prpInfo;
+            Property = prpInfo;
             m_Parents = parents;
         }
         
@@ -26,13 +26,13 @@ namespace Xarial.VPages.Framework.Binders
         {
             var value = Control.GetValue();
             var curModel = GetCurrentModel();
-            m_PrpInfo.SetValue(curModel, value, null);
+            Property.SetValue(curModel, value, null);
         }
 
         public override void UpdateUserControl()
         {
             var curModel = GetCurrentModel();
-            var val = m_PrpInfo.GetValue(curModel, null);
+            var val = Property.GetValue(curModel, null);
             Control.SetValue(val);
         }
 

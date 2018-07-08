@@ -146,6 +146,8 @@ namespace Xarial.VPages.Framework.Internal
 
             var constr = FindConstructor(type, atts);
 
+            //TODO: check if attributes set is compatible with the constructor
+
             if (parent is TPage)
             {
                 return constr.Create((TPage)parent, atts);

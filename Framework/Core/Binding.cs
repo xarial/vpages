@@ -9,7 +9,7 @@ namespace Xarial.VPages.Framework.Core
 {
     public abstract class Binding<TDataModel> : IBinding
     {
-        protected IControl Control { get; private set; }
+        internal protected IControl Control { get; private set; }
 
         protected TDataModel DataModel { get; private set; }
 

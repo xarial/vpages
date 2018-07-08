@@ -28,7 +28,7 @@ namespace WinFormsTests
             public GroupMock1 Group { get; set; }
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestMethod1()
         {
             var bld = new WinFormsPageBuilder();
