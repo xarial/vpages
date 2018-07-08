@@ -6,15 +6,15 @@ using Xarial.VPages.WinForms.Constructors;
 
 namespace Xarial.VPages.WinForms
 {
-    [DefaultType(typeof(AnyType))]
-    public class FormGroupConstructor : IGroupConstructor<FormGroup, FormPage>
+    [DefaultType(typeof(SpecialTypes.ComplexType))]
+    public class FormGroupConstructor : GroupConstructor<FormGroup, FormPage>
     {
-        public FormGroup Create(FormPage page, IAttributeSet atts)
+        protected override FormGroup Create(FormPage page, IAttributeSet atts)
         {
             return CreateGroup(page.Layout, atts);
         }
 
-        public FormGroup Create(FormGroup group, IAttributeSet atts)
+        protected override FormGroup Create(FormGroup group, IAttributeSet atts)
         {
             return CreateGroup(group.Layout, atts);
         }

@@ -10,22 +10,20 @@ namespace Xarial.VPages.Framework.Core
     {
         public int Id { get; private set; }
         public string Name { get; private set; }
-        public string Description { get; private set; }
 
         public bool Has<TAtt>()
             where TAtt : IAttribute
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public TAtt Get<TAtt>()
             where TAtt : IAttribute
         {
-            throw new NotImplementedException();
+            return default(TAtt);
         }
 
-        public void Set<TAtt>()
-            where TAtt : IAttribute
+        public void Add<TAtt>(TAtt att) where TAtt : IAttribute
         {
             throw new NotImplementedException();
         }

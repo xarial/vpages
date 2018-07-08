@@ -6,7 +6,7 @@ using Xarial.VPages.Core;
 using System.Diagnostics;
 using Xarial.VPages.Framework.Base;
 
-namespace Xarial.VPages.Framework.Core
+namespace Xarial.VPages.Framework.PageElements
 {
     public delegate void ControlValueChangedDelegate<TVal>(Control<TVal> sender, TVal newValue);
 

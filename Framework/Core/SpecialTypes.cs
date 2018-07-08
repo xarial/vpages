@@ -5,7 +5,14 @@ using System.Text;
 
 namespace Xarial.VPages.Framework.Core
 {
-    public class AnyType
+    public static class SpecialTypes
     {
+        public class AnyType
+        {
+        }
+
+        public class ComplexType
+        {
+        }
     }
 }

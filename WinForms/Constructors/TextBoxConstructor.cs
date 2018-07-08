@@ -6,14 +6,14 @@ using Xarial.VPages.WinForms.Constructors;
 namespace Xarial.VPages.WinForms
 {
     [DefaultType(typeof(string))]
-    public class TextBoxConstructor : IControlConstructor<TextBoxControl, FormGroup, FormPage>
+    public class TextBoxConstructor : ControlConstructor<TextBoxControl, FormGroup, FormPage>
     {
-        public TextBoxControl Create(FormPage page, IAttributeSet atts)
+        protected override TextBoxControl Create(FormPage page, IAttributeSet atts)
         {
             return CreateControl(page.Layout, atts);
         }
 
-        public TextBoxControl Create(FormGroup group, IAttributeSet atts)
+        protected override TextBoxControl Create(FormGroup group, IAttributeSet atts)
         {
             return CreateControl(group.Layout, atts);
         }

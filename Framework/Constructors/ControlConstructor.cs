@@ -6,9 +6,10 @@ using Xarial.VPages.Framework.Base;
 
 namespace Xarial.VPages.Framework.Constructors
 {
-    public interface IGroupConstructor<TGroup, TPage> : IPageElementConstructor<TGroup, TGroup, TPage>
-        where TGroup : IGroup
+    public abstract class ControlConstructor<TControl, TGroup, TPage> : PageElementConstructor<TControl, TGroup, TPage>
+        where TControl : IControl
         where TPage : IPage
+        where TGroup : IGroup
     {
     }
 }

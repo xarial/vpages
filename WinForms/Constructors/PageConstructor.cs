@@ -4,9 +4,9 @@ using Xarial.VPages.Framework.Base;
 
 namespace Xarial.VPages.WinForms
 {
-    public class FormPageConstructor : IPageConstructor<FormPage>
+    public class FormPageConstructor : PageConstructor<FormPage>
     {
-        public FormPage Create(IAttributeSet atts)
+        protected override FormPage Create(IAttributeSet atts)
         {
             return new FormPage();
         }

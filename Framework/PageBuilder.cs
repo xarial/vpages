@@ -16,19 +16,19 @@ namespace Xarial.VPages.Core
         private readonly IDataModelBinder m_DataBinder;
         private readonly IPageConstructor<TPage> m_PageConstructor;
 
-        private readonly ConstructorsContainer<TGroup, TPage, TGroup> m_GroupConstructors;
-        private readonly ConstructorsContainer<TControl, TPage, TGroup> m_ControlConstructors;
+        //private readonly ConstructorsContainer<TGroup, TPage, TGroup> m_GroupConstructors;
+        private readonly ConstructorsContainer<TPage, TGroup> m_ControlConstructors;
 
         public PageBuilder(IDataModelBinder dataBinder,
             IPageConstructor<TPage> pageConstr,
-            IGroupConstructor<TGroup, TPage> groupConstr,
-            IControlConstructor<TControl, TGroup, TPage>[] ctrlsContstrs)
+            params IPageElementConstructor<TGroup, TPage>[]
+            ctrlsContstrs)
         {
             m_DataBinder = dataBinder;
             m_PageConstructor = pageConstr;
 
-            m_GroupConstructors = new ConstructorsContainer<TGroup, TPage, TGroup>(groupConstr);
-            m_ControlConstructors = new ConstructorsContainer<TControl, TPage, TGroup>(ctrlsContstrs);
+            //m_GroupConstructors = new ConstructorsContainer<TGroup, TPage, TGroup>(groupConstr);
+            m_ControlConstructors = new ConstructorsContainer<TPage, TGroup>(ctrlsContstrs);
         }
         
         public TPage CreatePage<TModel>(TModel model)
@@ -43,8 +43,7 @@ namespace Xarial.VPages.Core
                     page = m_PageConstructor.Create(atts);
                     return page;
                 },
-                (type, atts, parent)=> m_ControlConstructors.CreateElement(type, parent, atts),
-                (type, atts, parent) => m_GroupConstructors.CreateElement(type, parent, atts),
+                (type, atts, parent) => m_ControlConstructors.CreateElement(type, parent, atts),
                 out bindings);
 
             page.Binding.Load(bindings);

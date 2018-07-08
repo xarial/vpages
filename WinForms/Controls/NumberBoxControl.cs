@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using Xarial.VPages.Core;
 using Xarial.VPages.Framework.Core;
+using Xarial.VPages.Framework.PageElements;
 
 namespace Xarial.VPages.WinForms
 {
@@ -34,7 +35,7 @@ namespace Xarial.VPages.WinForms
 
         protected override void SetValue(decimal value)
         {
-            m_NumberBox.Value = (decimal)value;
+            m_NumberBox.Value = value;
         }
     }
 }

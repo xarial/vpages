@@ -7,5 +7,13 @@ namespace Xarial.VPages.Framework.Base
 {
     public interface IAttributeSet
     {
+        int Id { get; }
+        string Name { get; }
+
+        bool Has<TAtt>() where TAtt : IAttribute;
+
+        TAtt Get<TAtt>() where TAtt : IAttribute;
+
+        void Add<TAtt>(TAtt att) where TAtt : IAttribute;
     }
 }

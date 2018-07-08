@@ -5,7 +5,7 @@ using System.Text;
 using Xarial.VPages.Core;
 using Xarial.VPages.Framework.Base;
 
-namespace Xarial.VPages.Framework.Core
+namespace Xarial.VPages.Framework.PageElements
 {
     public abstract class Group<TVal> : Control<TVal>, IGroup
     {

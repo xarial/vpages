@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Xarial.VPages.Framework.Base;
 
-namespace Xarial.VPages.Framework.Constructors
+namespace Xarial.VPages.Framework.Base
 {
     public interface IPageConstructor<TPage>
         where TPage : IPage

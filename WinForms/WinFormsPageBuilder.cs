@@ -14,11 +14,8 @@ namespace Xarial.VPages.WinForms
         public WinFormsPageBuilder(IDataModelBinder dataBinder)
             : base(dataBinder, new FormPageConstructor(),
                   new FormGroupConstructor(),
-                  new IControlConstructor<IFormControl, FormGroup, FormPage>[] 
-                  {
-                      new TextBoxConstructor(),
-                      new NumberBoxConstructor()
-                  })
+                  new TextBoxConstructor(),
+                  new NumberBoxConstructor())
         {
         }
 

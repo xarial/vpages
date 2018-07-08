@@ -5,6 +5,7 @@ using System.Text;
 using Xarial.VPages.Core;
 using Xarial.VPages.Framework.Base;
 using Xarial.VPages.Framework.Core;
+using Xarial.VPages.Framework.PageElements;
 
 namespace Xarial.VPages.WinForms
 {

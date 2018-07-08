@@ -4,36 +4,117 @@ using System.Linq;
 using System.Text;
 using Xarial.VPages.Framework.Attributes;
 using Xarial.VPages.Framework.Base;
+using Xarial.VPages.Framework.Base.Attributes;
 using Xarial.VPages.Framework.Constructors;
 using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.Framework.Internal
 {
-    internal class ConstructorsContainer<TOutPageElem, TPage, TGroup> 
-        : Dictionary<Type, IPageElementConstructor<TOutPageElem, TGroup, TPage>>
-        where TOutPageElem : IControl
+    internal class ConstructorsContainer<TPage, TGroup> 
         where TPage : IPage
         where TGroup : IGroup
     {
-        private IPageElementConstructor<TOutPageElem, TGroup, TPage> m_GenericConstructor;
+        private readonly IPageElementConstructor<TGroup, TPage> m_GenericConstructor;
+        private readonly IPageElementConstructor<TGroup, TPage> m_GenericComplexTypeConstructor;
 
-        internal ConstructorsContainer(params IPageElementConstructor<TOutPageElem, TGroup, TPage>[] constructors)
+        private readonly Dictionary<Type, IPageElementConstructor<TGroup, TPage>> m_DefaultConstructors;
+        private readonly Dictionary<Type, IPageElementConstructor<TGroup, TPage>> m_SpecificConstructors;
+
+        internal ConstructorsContainer(params IPageElementConstructor<TGroup, TPage>[] constructors)
         {
-            IndexConstructors(constructors);
+            m_DefaultConstructors = new Dictionary<Type, IPageElementConstructor<TGroup, TPage>>();
+            m_SpecificConstructors = new Dictionary<Type, IPageElementConstructor<TGroup, TPage>>();
+
+            foreach (var constr in constructors)
+            {
+                DefaultTypeAttribute dataTypeAtt;
+
+                var isDefaultConstr = constr.GetType().TryGetAttribute(out dataTypeAtt);
+
+                if (isDefaultConstr)
+                {
+                    var type = dataTypeAtt.Type;
+
+                    if (type == typeof(SpecialTypes.AnyType))
+                    {
+                        if (m_GenericConstructor != null)
+                        {
+                            //throw exception - duplicate generic constructor
+                        }
+
+                        m_GenericConstructor = constr;
+                    }
+                    if (type == typeof(SpecialTypes.ComplexType))
+                    {
+                        if (m_GenericComplexTypeConstructor != null)
+                        {
+                            //throw exception - duplicate generic group constructor
+                        }
+
+                        m_GenericComplexTypeConstructor = constr;
+                    }
+                    else
+                    {
+                        if (!m_DefaultConstructors.ContainsKey(dataTypeAtt.Type))
+                        {
+                            m_DefaultConstructors.Add(dataTypeAtt.Type, constr);
+                        }
+                        else
+                        {
+                            //TODO: throw exception
+                        }
+                    }
+                }
+                else
+                {
+                    if (!m_SpecificConstructors.ContainsKey(constr.GetType()))
+                    {
+                        m_SpecificConstructors.Add(constr.GetType(), constr);
+                    }
+                    else
+                    {
+                        //TODO: throw exception
+                    }
+                }
+            }
         }
 
-        private IPageElementConstructor<TOutPageElem, TGroup, TPage> FindConstructor(Type type)
+        private IPageElementConstructor<TGroup, TPage> FindConstructor(Type type, IAttributeSet atts)
         {
-            IPageElementConstructor<TOutPageElem, TGroup, TPage> constr;
-
-            if (!TryGetValue(type, out constr))
+            if (atts == null)
             {
-                constr = this.FirstOrDefault(
-                    t => type.IsAssignableFrom(type)).Value;
+                throw new ArgumentNullException(nameof(atts));
+            }
 
-                if (constr == null)
+            IPageElementConstructor<TGroup, TPage> constr = null;
+
+            if (atts.Has<ISpecificConstructorAttribute>())
+            {
+                var constrType = atts.Get<ISpecificConstructorAttribute>().ConstructorType;
+
+                if (!m_SpecificConstructors.TryGetValue(constrType, out constr))
                 {
-                    constr = m_GenericConstructor;
+                    //throw
+                }
+            }
+            else
+            {
+                if (!m_DefaultConstructors.TryGetValue(type, out constr))
+                {
+                    constr = m_DefaultConstructors.FirstOrDefault(
+                        t => t.Key.IsAssignableFrom(type)).Value;
+
+                    if (constr == null)
+                    {
+                        if (IsComplexType(type))
+                        {
+                            constr = m_GenericComplexTypeConstructor;
+                        }
+                        else
+                        {
+                            constr = m_GenericConstructor;
+                        }
+                    }
                 }
             }
 
@@ -48,9 +129,22 @@ namespace Xarial.VPages.Framework.Internal
             }
         }
 
-        internal TOutPageElem CreateElement(Type type, IGroup parent, IAttributeSet atts)
+        private bool IsComplexType(Type type)
         {
-            var constr = FindConstructor(type);
+            return !(type.IsPrimitive
+                || type.IsEnum
+                || type == typeof(string) 
+                || type == typeof(decimal));
+        }
+
+        internal IControl CreateElement(Type type, IGroup parent, IAttributeSet atts)
+        {
+            if (atts == null)
+            {
+                throw new ArgumentNullException(nameof(atts));
+            }
+
+            var constr = FindConstructor(type, atts);
 
             if (parent is TPage)
             {
@@ -64,43 +158,6 @@ namespace Xarial.VPages.Framework.Internal
             {
                 //TODO: throw
                 throw new Exception();
-            }
-        }
-        
-        private void IndexConstructors(IEnumerable<IPageElementConstructor<TOutPageElem, TGroup, TPage>> constructors)
-        {
-            foreach (var constr in constructors)
-            {
-                DefaultTypeAttribute dataTypeAtt;
-                if (constr.GetType().TryGetAttribute(out dataTypeAtt))
-                {
-                    var type = dataTypeAtt.Type;
-
-                    if (type == typeof(AnyType))
-                    {
-                        if (m_GenericConstructor != null)
-                        {
-                            //throw exception - duplicate generic constructor
-                        }
-
-                        m_GenericConstructor = constr;
-                    }
-                    else
-                    {
-                        if (!ContainsKey(dataTypeAtt.Type))
-                        {
-                            Add(dataTypeAtt.Type, constr);
-                        }
-                        else
-                        {
-                            //TODO: throw exception
-                        }
-                    }
-                }
-                else
-                {
-                    //TODO: throw exception
-                }
             }
         }
     }
