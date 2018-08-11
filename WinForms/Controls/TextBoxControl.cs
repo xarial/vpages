@@ -17,7 +17,7 @@ namespace Xarial.VPages.WinForms
 
         internal override Control Control => m_TextBox;
 
-        internal TextBoxControl()
+        internal TextBoxControl(int id) : base(id)
         {
             m_TextBox = new TextBox();
             m_TextBox.TextChanged += OnTextChanged;

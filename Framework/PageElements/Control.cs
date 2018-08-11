@@ -47,6 +47,13 @@ namespace Xarial.VPages.Framework.PageElements
             SetValue((TVal)value);
         }
 
+        public int Id { get; private set; }
+
+        protected Control(int id)
+        {
+            Id = id;
+        }
+
         protected abstract TVal GetValue();
         protected abstract void SetValue(TVal value);
 

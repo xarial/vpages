@@ -7,6 +7,10 @@ namespace Xarial.VPages.Framework.PageElements
     {
         private BindingGroup m_Binding;
 
+        public Page() : base(-1)
+        {
+        }
+
         public BindingGroup Binding
         {
             get

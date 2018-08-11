@@ -21,7 +21,7 @@ namespace Xarial.VPages.WinForms
 
         private FormGroup CreateGroup(LayoutControl layout, IAttributeSet atts)
         {
-            var grp = new FormGroup();
+            var grp = new FormGroup(atts.Id);
             layout.AddControl(grp.Group);
             return grp;
         }

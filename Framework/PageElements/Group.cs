@@ -13,6 +13,10 @@ namespace Xarial.VPages.Framework.PageElements
         protected override event ControlValueChangedDelegate<TVal> ValueChanged;
 #pragma warning restore CS0067
 
+        protected Group(int id) : base(id)
+        {
+        }
+
         protected override TVal GetValue()
         {
             return default(TVal);
@@ -25,5 +29,8 @@ namespace Xarial.VPages.Framework.PageElements
 
     public abstract class Group : Group<object>
     {
+        protected Group(int id) : base(id)
+        {
+        }
     }
 }

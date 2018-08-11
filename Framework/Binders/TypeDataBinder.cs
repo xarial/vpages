@@ -21,22 +21,27 @@ namespace Xarial.VPages.Framework.Binders
 
             var page = pageCreator.Invoke(GetAttributeSet(type, -1));
 
+            var firstCtrlId = 0;
+
             TraverseType(model.GetType(), model, new List<PropertyInfo>(),
-                ctrlCreator, page, bindingsList);
+                ctrlCreator, page, bindingsList, ref firstCtrlId);
         }
 
         private void TraverseType<TDataModel>(Type type, TDataModel model, List<PropertyInfo> parents,
             CreateBindingControlDelegate ctrlCreator,
-            IGroup parentCtrl, List<IBinding> bindings, int nextCtrlId = 0)
+            IGroup parentCtrl, List<IBinding> bindings, ref int nextCtrlId)
         {
             foreach (var prp in type.GetProperties())
             {
                 var prpType = prp.PropertyType;
 
                 var ctrl = ctrlCreator.Invoke(prpType, GetAttributeSet(prp, nextCtrlId), parentCtrl);
+                nextCtrlId++;
                 
                 var binding = new PropertyInfoBinding<TDataModel>(model, ctrl, prp, parents);
                 bindings.Add(binding);
+
+                binding.UpdateUserControl();
 
                 var isGroup = ctrl is IGroup;
 
@@ -45,7 +50,7 @@ namespace Xarial.VPages.Framework.Binders
                     var grpParents = new List<PropertyInfo>(parents);
                     grpParents.Add(prp);
                     TraverseType(prpType, model, grpParents, ctrlCreator,
-                        ctrl as IGroup, bindings, nextCtrlId + 1);
+                        ctrl as IGroup, bindings, ref nextCtrlId);
                 }
             }
         }
@@ -53,36 +58,39 @@ namespace Xarial.VPages.Framework.Binders
         private IAttributeSet GetAttributeSet(PropertyInfo prp, int ctrlId)
         {
             string name;
-            
-            var typeAtts = ParseAttributes(prp.PropertyType.GetCustomAttributes(true), out name);
+            string desc;
 
-            var prpAtts = ParseAttributes(prp.GetCustomAttributes(true), out name);
+            var typeAtts = ParseAttributes(prp.PropertyType.GetCustomAttributes(true), out name, out desc);
+
+            var prpAtts = ParseAttributes(prp.GetCustomAttributes(true), out name, out desc);
 
             if (string.IsNullOrEmpty(name))
             {
                 name = prp.Name;
             }
 
-            return CreateAttributeSet(ctrlId, name, prpAtts.Union(typeAtts).ToArray());
+            return CreateAttributeSet(ctrlId, name, desc, prpAtts.Union(typeAtts).ToArray());
         }
 
         private IAttributeSet GetAttributeSet(Type type, int ctrlId)
         {
             string name;
+            string desc;
 
-            var typeAtts = ParseAttributes(type.GetCustomAttributes(true), out name);
+            var typeAtts = ParseAttributes(type.GetCustomAttributes(true), out name, out desc);
 
             if (string.IsNullOrEmpty(name))
             {
                 name = type.Name;
             }
 
-            return CreateAttributeSet(ctrlId, name, typeAtts.ToArray());
+            return CreateAttributeSet(ctrlId, name, desc, typeAtts.ToArray());
         }
 
-        private IEnumerable<IAttribute> ParseAttributes(object[] customAtts, out string name)
+        private IEnumerable<IAttribute> ParseAttributes(object[] customAtts, out string name, out string desc)
         {
             name = customAtts?.OfType<DisplayNameAttribute>()?.FirstOrDefault()?.DisplayName;
+            desc = customAtts?.OfType<DescriptionAttribute>()?.FirstOrDefault()?.Description;
 
             if (customAtts == null)
             {
@@ -94,9 +102,9 @@ namespace Xarial.VPages.Framework.Binders
             }
         }
 
-        private IAttributeSet CreateAttributeSet(int ctrlId, string ctrlName, IAttribute[] atts)
+        private IAttributeSet CreateAttributeSet(int ctrlId, string ctrlName, string desc, IAttribute[] atts)
         {
-            var attsSet = new AttributeSet(ctrlId, ctrlName);
+            var attsSet = new AttributeSet(ctrlId, ctrlName, desc);
 
             if (atts?.Any() == true)
             {

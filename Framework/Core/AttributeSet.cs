@@ -11,13 +11,15 @@ namespace Xarial.VPages.Framework.Core
     {
         public int Id { get; private set; }
         public string Name { get; private set; }
+        public string Description { get; private set; }
 
         private readonly Dictionary<Type, List<IAttribute>> m_Attributes;
 
-        internal AttributeSet(int ctrlId, string ctrlName)
+        internal AttributeSet(int ctrlId, string ctrlName, string desc)
         {
             Id = ctrlId;
             Name = ctrlName;
+            Description = desc;
             m_Attributes = new Dictionary<Type, List<IAttribute>>();
         }
 

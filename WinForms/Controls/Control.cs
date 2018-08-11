@@ -15,6 +15,10 @@ namespace Xarial.VPages.WinForms
 
     public abstract class FormControl<TVal> : Control<TVal>, IFormControl
     {
+        public FormControl(int id) : base(id)
+        {
+        }
+
         internal abstract System.Windows.Forms.Control Control { get; }
     }
 }

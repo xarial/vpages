@@ -16,7 +16,7 @@ namespace Xarial.VPages.WinForms
 
         internal GroupBox Group { get; private set; }
 
-        internal FormGroup()
+        internal FormGroup(int id) : base(id)
         {
             Group = new GroupBox()
             {

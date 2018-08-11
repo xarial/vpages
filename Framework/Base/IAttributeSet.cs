@@ -10,6 +10,7 @@ namespace Xarial.VPages.Framework.Base
     {
         int Id { get; }
         string Name { get; }
+        string Description { get; }
 
         bool Has<TAtt>() where TAtt : IAttribute;
 

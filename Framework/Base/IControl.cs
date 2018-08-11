@@ -12,6 +12,8 @@ namespace Xarial.VPages.Framework.Base
     {
         event ControlObjectValueChangedDelegate ValueChanged;
 
+        int Id { get; }
+
         object GetValue();
         void SetValue(object value);
     }
