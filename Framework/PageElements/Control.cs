@@ -44,7 +44,9 @@ namespace Xarial.VPages.Framework.PageElements
 
         public void SetValue(object value)
         {
-            SetValue((TVal)value);
+            var destVal = value.Cast<TVal>();
+
+            SetValue(destVal);
         }
 
         public int Id { get; private set; }

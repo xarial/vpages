@@ -12,21 +12,25 @@ namespace Xarial.VPages.Framework.Core
         public int Id { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
+        public Type BoundType { get; private set; }
 
         private readonly Dictionary<Type, List<IAttribute>> m_Attributes;
 
-        internal AttributeSet(int ctrlId, string ctrlName, string desc)
+        internal AttributeSet(int ctrlId, string ctrlName, string desc, Type boundType)
         {
             Id = ctrlId;
             Name = ctrlName;
             Description = desc;
+            BoundType = boundType;
+
             m_Attributes = new Dictionary<Type, List<IAttribute>>();
         }
 
         public bool Has<TAtt>()
             where TAtt : IAttribute
         {
-            return m_Attributes.ContainsKey(typeof(TAtt));
+            return m_Attributes.Keys.Any(
+                t => typeof(TAtt).IsAssignableFrom(t));
         }
 
         public TAtt Get<TAtt>()
@@ -55,8 +59,15 @@ namespace Xarial.VPages.Framework.Core
 
         public IEnumerable<TAtt> GetAll<TAtt>() where TAtt : IAttribute
         {
-            List<IAttribute> atts;
-            if (m_Attributes.TryGetValue(typeof(TAtt), out atts))
+            var atts = new List<IAttribute>();
+
+            foreach (var attGrp in m_Attributes.Where(
+                a => typeof(TAtt).IsAssignableFrom(a.Key)))
+            {
+                atts.AddRange(attGrp.Value);
+            }
+            
+            if (atts.Any())
             {
                 return atts.Cast<TAtt>();
             }

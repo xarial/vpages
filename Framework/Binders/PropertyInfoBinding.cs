@@ -26,7 +26,10 @@ namespace Xarial.VPages.Framework.Binders
         {
             var value = Control.GetValue();
             var curModel = GetCurrentModel();
-            Property.SetValue(curModel, value, null);
+
+            var destVal = value.Cast(Property.PropertyType);
+
+            Property.SetValue(curModel, destVal, null);
         }
 
         public override void UpdateUserControl()

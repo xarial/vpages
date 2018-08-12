@@ -41,8 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\DefaultTypeAttribute.cs" />
+    <Compile Include="Attributes\IgnoreBindingAttribute.cs" />
     <Compile Include="Attributes\SpecificConstructorAttribute.cs" />
     <Compile Include="Base\Attributes\IDefaultTypeAttribute.cs" />
+    <Compile Include="Base\Attributes\IIgnoreBindingAttribute.cs" />
     <Compile Include="Base\Attributes\ISpecificConstructorAttribute.cs" />
     <Compile Include="Base\IAttributeSet.cs" />
     <Compile Include="Base\IPageConstructor.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="PageElements\Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Binders\TypeDataBinder.cs" />
+    <Compile Include="Reflection\ObjectExtension.cs" />
     <Compile Include="Reflection\TypeExtension.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,6 @@ namespace Xarial.VPages.Core
         private readonly IDataModelBinder m_DataBinder;
         private readonly IPageConstructor<TPage> m_PageConstructor;
 
-        //private readonly ConstructorsContainer<TGroup, TPage, TGroup> m_GroupConstructors;
         private readonly ConstructorsContainer<TPage, TGroup> m_ControlConstructors;
 
         public PageBuilder(IDataModelBinder dataBinder,
@@ -27,7 +26,6 @@ namespace Xarial.VPages.Core
             m_DataBinder = dataBinder;
             m_PageConstructor = pageConstr;
 
-            //m_GroupConstructors = new ConstructorsContainer<TGroup, TPage, TGroup>(groupConstr);
             m_ControlConstructors = new ConstructorsContainer<TPage, TGroup>(ctrlsContstrs);
         }
         

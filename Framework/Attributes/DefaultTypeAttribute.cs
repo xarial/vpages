@@ -7,7 +7,7 @@ using Xarial.VPages.Framework.Base.Attributes;
 
 namespace Xarial.VPages.Framework.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class DefaultTypeAttribute : Attribute, IDefaultTypeAttribute
     {
         public Type Type { get; private set; }

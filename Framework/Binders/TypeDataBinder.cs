@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Xarial.VPages.Framework.Base;
+using Xarial.VPages.Framework.Base.Attributes;
 using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.Framework.Binders
@@ -35,22 +36,27 @@ namespace Xarial.VPages.Framework.Binders
             {
                 var prpType = prp.PropertyType;
 
-                var ctrl = ctrlCreator.Invoke(prpType, GetAttributeSet(prp, nextCtrlId), parentCtrl);
-                nextCtrlId++;
-                
-                var binding = new PropertyInfoBinding<TDataModel>(model, ctrl, prp, parents);
-                bindings.Add(binding);
+                var atts = GetAttributeSet(prp, nextCtrlId);
 
-                binding.UpdateUserControl();
-
-                var isGroup = ctrl is IGroup;
-
-                if (isGroup)
+                if (!atts.Has<IIgnoreBindingAttribute>())
                 {
-                    var grpParents = new List<PropertyInfo>(parents);
-                    grpParents.Add(prp);
-                    TraverseType(prpType, model, grpParents, ctrlCreator,
-                        ctrl as IGroup, bindings, ref nextCtrlId);
+                    var ctrl = ctrlCreator.Invoke(prpType, atts, parentCtrl);
+                    nextCtrlId++;
+
+                    var binding = new PropertyInfoBinding<TDataModel>(model, ctrl, prp, parents);
+                    bindings.Add(binding);
+
+                    binding.UpdateUserControl();
+
+                    var isGroup = ctrl is IGroup;
+
+                    if (isGroup)
+                    {
+                        var grpParents = new List<PropertyInfo>(parents);
+                        grpParents.Add(prp);
+                        TraverseType(prpType, model, grpParents, ctrlCreator,
+                            ctrl as IGroup, bindings, ref nextCtrlId);
+                    }
                 }
             }
         }
@@ -60,7 +66,9 @@ namespace Xarial.VPages.Framework.Binders
             string name;
             string desc;
 
-            var typeAtts = ParseAttributes(prp.PropertyType.GetCustomAttributes(true), out name, out desc);
+            var type = prp.PropertyType;
+
+            var typeAtts = ParseAttributes(type.GetCustomAttributes(true), out name, out desc);
 
             var prpAtts = ParseAttributes(prp.GetCustomAttributes(true), out name, out desc);
 
@@ -69,7 +77,7 @@ namespace Xarial.VPages.Framework.Binders
                 name = prp.Name;
             }
 
-            return CreateAttributeSet(ctrlId, name, desc, prpAtts.Union(typeAtts).ToArray());
+            return CreateAttributeSet(ctrlId, name, desc, type, prpAtts.Union(typeAtts).ToArray());
         }
 
         private IAttributeSet GetAttributeSet(Type type, int ctrlId)
@@ -84,7 +92,7 @@ namespace Xarial.VPages.Framework.Binders
                 name = type.Name;
             }
 
-            return CreateAttributeSet(ctrlId, name, desc, typeAtts.ToArray());
+            return CreateAttributeSet(ctrlId, name, desc, type, typeAtts.ToArray());
         }
 
         private IEnumerable<IAttribute> ParseAttributes(object[] customAtts, out string name, out string desc)
@@ -102,9 +110,10 @@ namespace Xarial.VPages.Framework.Binders
             }
         }
 
-        private IAttributeSet CreateAttributeSet(int ctrlId, string ctrlName, string desc, IAttribute[] atts)
+        private IAttributeSet CreateAttributeSet(int ctrlId, string ctrlName, 
+            string desc, Type boundType, IAttribute[] atts)
         {
-            var attsSet = new AttributeSet(ctrlId, ctrlName, desc);
+            var attsSet = new AttributeSet(ctrlId, ctrlName, desc, boundType);
 
             if (atts?.Any() == true)
             {

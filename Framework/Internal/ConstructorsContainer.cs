@@ -27,41 +27,45 @@ namespace Xarial.VPages.Framework.Internal
 
             foreach (var constr in constructors)
             {
-                DefaultTypeAttribute dataTypeAtt;
+                var dataTypeAtts = constr.GetType().GetCustomAttributes(
+                    typeof(DefaultTypeAttribute), true).OfType<DefaultTypeAttribute>();
 
-                var isDefaultConstr = constr.GetType().TryGetAttribute(out dataTypeAtt);
+                var isDefaultConstr = dataTypeAtts.Any();
 
                 if (isDefaultConstr)
                 {
-                    var type = dataTypeAtt.Type;
-
-                    if (type == typeof(SpecialTypes.AnyType))
+                    foreach (var dataTypeAtt in dataTypeAtts)
                     {
-                        if (m_GenericConstructor != null)
+                        var type = dataTypeAtt.Type;
+
+                        if (type == typeof(SpecialTypes.AnyType))
                         {
-                            //throw exception - duplicate generic constructor
+                            if (m_GenericConstructor != null)
+                            {
+                                //throw exception - duplicate generic constructor
+                            }
+
+                            m_GenericConstructor = constr;
                         }
-
-                        m_GenericConstructor = constr;
-                    }
-                    if (type == typeof(SpecialTypes.ComplexType))
-                    {
-                        if (m_GenericComplexTypeConstructor != null)
+                        if (type == typeof(SpecialTypes.ComplexType))
                         {
-                            //throw exception - duplicate generic group constructor
-                        }
+                            if (m_GenericComplexTypeConstructor != null)
+                            {
+                                //throw exception - duplicate generic group constructor
+                            }
 
-                        m_GenericComplexTypeConstructor = constr;
-                    }
-                    else
-                    {
-                        if (!m_DefaultConstructors.ContainsKey(dataTypeAtt.Type))
-                        {
-                            m_DefaultConstructors.Add(dataTypeAtt.Type, constr);
+                            m_GenericComplexTypeConstructor = constr;
                         }
                         else
                         {
-                            //TODO: throw exception
+                            if (!m_DefaultConstructors.ContainsKey(dataTypeAtt.Type))
+                            {
+                                m_DefaultConstructors.Add(dataTypeAtt.Type, constr);
+                            }
+                            else
+                            {
+                                //TODO: throw exception
+                            }
                         }
                     }
                 }
@@ -92,10 +96,21 @@ namespace Xarial.VPages.Framework.Internal
             {
                 var constrType = atts.Get<ISpecificConstructorAttribute>().ConstructorType;
 
-                if (!m_SpecificConstructors.TryGetValue(constrType, out constr))
+                var constrs = m_SpecificConstructors.Where(c => constrType.IsAssignableFrom(c.Key));
+
+                if (constrs.Count() == 1)
                 {
-                    //throw
+                    constr = constrs.First().Value;
                 }
+                else if (!constrs.Any())
+                {
+                    throw new Exception("No constructors");
+                }
+                else
+                {
+                    throw new Exception("Too many constructors");
+                }
+                
             }
             else
             {
