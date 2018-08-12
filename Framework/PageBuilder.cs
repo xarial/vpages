@@ -31,7 +31,7 @@ namespace Xarial.VPages.Core
         
         public TPage CreatePage<TModel>(TModel model)
         {
-            TPage page = default(TPage);
+            var page = default(TPage);
 
             IEnumerable<IBinding> bindings;
 

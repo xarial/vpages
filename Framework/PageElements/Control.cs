@@ -46,7 +46,7 @@ namespace Xarial.VPages.Framework.PageElements
         {
             var destVal = value.Cast<TVal>();
 
-            SetValue(destVal);
+            SetSpecificValue(destVal);
         }
 
         public int Id { get; private set; }
@@ -56,12 +56,12 @@ namespace Xarial.VPages.Framework.PageElements
             Id = id;
         }
 
-        protected abstract TVal GetValue();
-        protected abstract void SetValue(TVal value);
+        protected abstract TVal GetSpecificValue();
+        protected abstract void SetSpecificValue(TVal value);
 
         object IControl.GetValue()
         {
-            return GetValue();
+            return GetSpecificValue();
         }
     }
 }

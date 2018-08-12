@@ -17,12 +17,12 @@ namespace Xarial.VPages.Framework.PageElements
         {
         }
 
-        protected override TVal GetValue()
+        protected override TVal GetSpecificValue()
         {
             return default(TVal);
         }
 
-        protected override void SetValue(TVal value)
+        protected override void SetSpecificValue(TVal value)
         {
         }
     }

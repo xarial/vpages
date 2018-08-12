@@ -18,11 +18,8 @@ namespace System
 
             if (value != null)
             {
-                if (type.IsAssignableFrom(value.GetType()))
-                {
-                    destVal = value;
-                }
-                else
+                if (!type.IsAssignableFrom(value.GetType()) 
+                    && (typeof(IConvertible)).IsAssignableFrom(type))
                 {
                     try
                     {
@@ -33,6 +30,11 @@ namespace System
                         throw new InvalidCastException(
                             $"Specified constructor for {type.Name} type is invalid as value cannot be cast from {value.GetType().Name}");
                     }
+                }
+                else
+                {
+                    //TODO: change this - validate that cast is possible otherwise throw exception
+                    destVal = value;
                 }
             }
 
