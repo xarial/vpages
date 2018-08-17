@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Xarial.VPages.Framework</id>
+    <version>0.1.0-beta</version>
+    <title>vPages</title>
+    <authors>Xarial</authors>
+    <owners>Xarial</owners>
+    <licenseUrl>https://github.com/xarial/vpages/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://www.xarial.net/products/developers/vpages/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Framework for abstract data driven pages</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright © Xarial 2018</copyright>
+    <tags>Pages Data UI Forms</tags>
+  </metadata>
+</package>
