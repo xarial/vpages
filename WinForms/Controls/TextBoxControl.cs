@@ -28,12 +28,12 @@ namespace Xarial.VPages.WinForms
             ValueChanged.Invoke(this, m_TextBox.Text);
         }
 
-        protected override string GetValue()
+        protected override string GetSpecificValue()
         {
             return m_TextBox.Text;
         }
 
-        protected override void SetValue(string value)
+        protected override void SetSpecificValue(string value)
         {
             m_TextBox.Text = value as string;
         }

@@ -25,15 +25,15 @@ namespace Xarial.VPages.WinForms
 
         private void OnNumberBoxValueChanged(object sender, EventArgs e)
         {
-            ValueChanged?.Invoke(this, GetValue());
+            ValueChanged?.Invoke(this, GetSpecificValue());
         }
 
-        protected override decimal GetValue()
+        protected override decimal GetSpecificValue()
         {
             return m_NumberBox.Value;
         }
 
-        protected override void SetValue(decimal value)
+        protected override void SetSpecificValue(decimal value)
         {
             m_NumberBox.Value = value;
         }
