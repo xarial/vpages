@@ -71,6 +71,9 @@
     <Compile Include="Core\AttributeSet.cs" />
     <Compile Include="Core\Binding.cs" />
     <Compile Include="Core\BindingGroup.cs" />
+    <Compile Include="Exceptions\ConstructorNotFoundException.cs" />
+    <Compile Include="Exceptions\InvalidParentControlException.cs" />
+    <Compile Include="Exceptions\OverdefinedConstructorException.cs" />
     <Compile Include="Internal\ConstructorsContainer.cs" />
     <Compile Include="PageBuilder.cs" />
     <Compile Include="PageElements\Control.cs" />
@@ -81,9 +84,7 @@
     <Compile Include="Reflection\ObjectExtension.cs" />
     <Compile Include="Reflection\TypeExtension.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="xarial.snk" />
   </ItemGroup>
