@@ -7,6 +7,7 @@ using Xarial.VPages.Framework.Base;
 using Xarial.VPages.Framework.Base.Attributes;
 using Xarial.VPages.Framework.Constructors;
 using Xarial.VPages.Framework.Core;
+using Xarial.VPages.Framework.Exceptions;
 
 namespace Xarial.VPages.Framework.Internal
 {
@@ -14,16 +15,26 @@ namespace Xarial.VPages.Framework.Internal
         where TPage : IPage
         where TGroup : IGroup
     {
-        private readonly IPageElementConstructor<TGroup, TPage> m_GenericConstructor;
-        private readonly IPageElementConstructor<TGroup, TPage> m_GenericComplexTypeConstructor;
-
+        /// <summary>
+        /// Constructors for the default data types (i.e. int, double, bool etc.)
+        /// </summary>
         private readonly Dictionary<Type, IPageElementConstructor<TGroup, TPage>> m_DefaultConstructors;
+
+        /// <summary>
+        /// Specific constructor for specific data types
+        /// </summary>
         private readonly Dictionary<Type, IPageElementConstructor<TGroup, TPage>> m_SpecificConstructors;
+
+        /// <summary>
+        /// Constructors for the special types (i.e. complex, enums, etc.)
+        /// </summary>
+        private readonly Dictionary<Type, IPageElementConstructor<TGroup, TPage>> m_SpecialTypeConstructors;
 
         internal ConstructorsContainer(params IPageElementConstructor<TGroup, TPage>[] constructors)
         {
             m_DefaultConstructors = new Dictionary<Type, IPageElementConstructor<TGroup, TPage>>();
             m_SpecificConstructors = new Dictionary<Type, IPageElementConstructor<TGroup, TPage>>();
+            m_SpecialTypeConstructors = new Dictionary<Type, IPageElementConstructor<TGroup, TPage>>();
 
             foreach (var constr in constructors)
             {
@@ -38,23 +49,16 @@ namespace Xarial.VPages.Framework.Internal
                     {
                         var type = dataTypeAtt.Type;
 
-                        if (type == typeof(SpecialTypes.AnyType))
+                        if (typeof(SpecialTypes.ISpecialType).IsAssignableFrom(type))
                         {
-                            if (m_GenericConstructor != null)
+                            if (!m_SpecialTypeConstructors.ContainsKey(type))
                             {
-                                //throw exception - duplicate generic constructor
+                                m_SpecialTypeConstructors.Add(type, constr);
                             }
-
-                            m_GenericConstructor = constr;
-                        }
-                        if (type == typeof(SpecialTypes.ComplexType))
-                        {
-                            if (m_GenericComplexTypeConstructor != null)
+                            else
                             {
-                                //throw exception - duplicate generic group constructor
-                            }
-
-                            m_GenericComplexTypeConstructor = constr;
+                                throw new OverdefinedConstructorException(constr.GetType(), type);
+                            }   
                         }
                         else
                         {
@@ -64,7 +68,7 @@ namespace Xarial.VPages.Framework.Internal
                             }
                             else
                             {
-                                //TODO: throw exception
+                                throw new OverdefinedConstructorException(constr.GetType(), dataTypeAtt.Type);
                             }
                         }
                     }
@@ -77,7 +81,7 @@ namespace Xarial.VPages.Framework.Internal
                     }
                     else
                     {
-                        //TODO: throw exception
+                        throw new OverdefinedConstructorException(constr.GetType(), constr.GetType());
                     }
                 }
             }
@@ -104,11 +108,11 @@ namespace Xarial.VPages.Framework.Internal
                 }
                 else if (!constrs.Any())
                 {
-                    throw new Exception("No constructors");
+                    throw new ConstructorNotFoundException(type, "Specific constructor is not registered");
                 }
                 else
                 {
-                    throw new Exception("Too many constructors");
+                    throw new ConstructorNotFoundException(type, "Too many constructors registered");
                 }
                 
             }
@@ -121,13 +125,12 @@ namespace Xarial.VPages.Framework.Internal
 
                     if (constr == null)
                     {
-                        if (IsComplexType(type))
+                        foreach (var specType in SpecialTypes.FindMathingSpecialTypes(type))
                         {
-                            constr = m_GenericComplexTypeConstructor;
-                        }
-                        else
-                        {
-                            constr = m_GenericConstructor;
+                            if (m_SpecialTypeConstructors.TryGetValue(specType, out constr))
+                            {
+                                break;
+                            }
                         }
                     }
                 }
@@ -139,24 +142,25 @@ namespace Xarial.VPages.Framework.Internal
             }
             else
             {
-                //TODO: throw exception
-                throw new Exception();
+                throw new ConstructorNotFoundException(type);
             }
-        }
-
-        private bool IsComplexType(Type type)
-        {
-            return !(type.IsPrimitive
-                || type.IsEnum
-                || type == typeof(string) 
-                || type == typeof(decimal));
         }
 
         internal IControl CreateElement(Type type, IGroup parent, IAttributeSet atts)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
             if (atts == null)
             {
                 throw new ArgumentNullException(nameof(atts));
+            }
+
+            if (parent == null)
+            {
+                throw new ArgumentNullException(nameof(parent));
             }
 
             var constr = FindConstructor(type, atts);
@@ -173,8 +177,7 @@ namespace Xarial.VPages.Framework.Internal
             }
             else
             {
-                //TODO: throw
-                throw new Exception();
+                throw new InvalidParentControlException(parent.GetType(), typeof(TPage), typeof(TGroup));
             }
         }
     }
