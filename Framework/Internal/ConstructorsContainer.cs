@@ -152,7 +152,7 @@ namespace Xarial.VPages.Framework.Internal
             {
                 throw new ArgumentNullException(nameof(type));
             }
-
+            
             if (atts == null)
             {
                 throw new ArgumentNullException(nameof(atts));

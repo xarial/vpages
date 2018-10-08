@@ -9,6 +9,7 @@ namespace Xarial.VPages.Framework.Base
     public interface IAttributeSet
     {
         int Id { get; }
+        object Tag { get; }
         string Name { get; }
         string Description { get; }
         Type BoundType { get; }

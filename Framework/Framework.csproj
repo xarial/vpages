@@ -55,13 +55,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ControlTagAttribute.cs" />
     <Compile Include="Attributes\DefaultTypeAttribute.cs" />
+    <Compile Include="Attributes\DependentOnAttribute.cs" />
     <Compile Include="Attributes\IgnoreBindingAttribute.cs" />
     <Compile Include="Attributes\SpecificConstructorAttribute.cs" />
+    <Compile Include="Base\Attributes\IControlTagAttribute.cs" />
     <Compile Include="Base\Attributes\IDefaultTypeAttribute.cs" />
+    <Compile Include="Base\Attributes\IDependentOnAttribute.cs" />
     <Compile Include="Base\Attributes\IIgnoreBindingAttribute.cs" />
     <Compile Include="Base\Attributes\ISpecificConstructorAttribute.cs" />
     <Compile Include="Base\IAttributeSet.cs" />
+    <Compile Include="Base\IDependencyHandler.cs" />
     <Compile Include="Base\IPageConstructor.cs" />
     <Compile Include="Base\IPageElementConstructor.cs" />
     <Compile Include="Binders\PropertyInfoBinding.cs" />
@@ -76,6 +81,7 @@
     <Compile Include="Constructors\GroupConstructor.cs" />
     <Compile Include="Constructors\PageConstructor.cs" />
     <Compile Include="Constructors\PageElementConstructor.cs" />
+    <Compile Include="Core\DependencyManager.cs" />
     <Compile Include="Core\SpecialTypes.cs" />
     <Compile Include="Core\AttributeSet.cs" />
     <Compile Include="Core\Binding.cs" />

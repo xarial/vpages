@@ -20,7 +20,7 @@ namespace Xarial.VPages.WinForms
 
         private TextBoxControl CreateControl(LayoutControl layout, IAttributeSet atts)
         {
-            var ctrl = new TextBoxControl(atts.Id);
+            var ctrl = new TextBoxControl(atts.Id, atts.Tag);
             layout.AddControl(ctrl.Control);
             return ctrl;
         }

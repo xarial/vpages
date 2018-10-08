@@ -51,10 +51,13 @@ namespace Xarial.VPages.Framework.PageElements
 
         public int Id { get; private set; }
 
-        protected Control(int id)
+        protected Control(int id, object tag)
         {
             Id = id;
+            Tag = tag;
         }
+
+        public object Tag { get; private set; }
 
         protected abstract TVal GetSpecificValue();
         protected abstract void SetSpecificValue(TVal value);

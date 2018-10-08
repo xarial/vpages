@@ -26,7 +26,7 @@ namespace Xarial.VPages.WinForms
 
         private NumberBoxControl CreateControl(LayoutControl layout, IAttributeSet atts)
         {
-            var ctrl = new NumberBoxControl(atts.Id);
+            var ctrl = new NumberBoxControl(atts.Id, atts.Tag);
             layout.AddControl(ctrl.Control);
             return ctrl;
         }

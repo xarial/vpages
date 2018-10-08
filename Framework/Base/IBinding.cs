@@ -8,7 +8,13 @@ namespace Xarial.VPages.Framework.Base
 {
     public interface IBinding
     {
-        void UpdateUserControl();
+        event Action<IBinding> ModelUpdated;
+        event Action<IBinding> ControlUpdated;
+
+        IControl Control { get; }
+        object Model { get; }
+
+        void UpdateControl();
         void UpdateDataModel();
     }
 }

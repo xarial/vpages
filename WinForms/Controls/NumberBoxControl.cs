@@ -17,7 +17,7 @@ namespace Xarial.VPages.WinForms
 
         internal override Control Control => m_NumberBox;
 
-        internal NumberBoxControl(int id) : base(id)
+        internal NumberBoxControl(int id, object tag) : base(id, tag)
         {
             m_NumberBox = new NumericUpDown();
             m_NumberBox.ValueChanged += OnNumberBoxValueChanged;

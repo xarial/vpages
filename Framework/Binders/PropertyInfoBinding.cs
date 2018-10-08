@@ -22,7 +22,7 @@ namespace Xarial.VPages.Framework.Binders
             m_Parents = parents;
         }
         
-        public override void UpdateDataModel()
+        protected override void SetDataModelValue()
         {
             var value = Control.GetValue();
             var curModel = GetCurrentModel();
@@ -32,7 +32,7 @@ namespace Xarial.VPages.Framework.Binders
             Property.SetValue(curModel, destVal, null);
         }
 
-        public override void UpdateUserControl()
+        protected override void SetUserControlValue()
         {
             var curModel = GetCurrentModel();
             var val = Property.GetValue(curModel, null);
