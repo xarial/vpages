@@ -13,6 +13,6 @@ namespace Xarial.VPages.Framework.Base
     {
         void Bind<TDataModel>(TDataModel model, CreateBindingPageDelegate pageCreator,
             CreateBindingControlDelegate ctrlCreator,
-            out IEnumerable<IBinding> bindings, out IDependencyManager dependencies);
+            out IEnumerable<IBinding> bindings, out IRawDependencyGroup dependencies);
     }
 }

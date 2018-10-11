@@ -6,8 +6,8 @@ using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.Framework.Base
 {
-    public interface IPage : IGroup
+    public interface IDependencyManager
     {
-        IBindingManager Binding { get; }
+        void Init(IRawDependencyGroup depGroup);
     }
 }

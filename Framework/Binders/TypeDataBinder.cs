@@ -14,7 +14,7 @@ namespace Xarial.VPages.Framework.Binders
     {
         public void Bind<TDataModel>(TDataModel model, CreateBindingPageDelegate pageCreator,
             CreateBindingControlDelegate ctrlCreator,
-            out IEnumerable<IBinding> bindings, out IDependencyManager dependencies)
+            out IEnumerable<IBinding> bindings, out IRawDependencyGroup dependencies)
         {
             var type = model.GetType();
 
@@ -25,7 +25,7 @@ namespace Xarial.VPages.Framework.Binders
 
             var firstCtrlId = 0;
 
-            dependencies = new DependencyManager();
+            dependencies = new RawDependencyGroup();
 
             TraverseType(model.GetType(), model, new List<PropertyInfo>(),
                 ctrlCreator, page, bindingsList, dependencies, ref firstCtrlId);
@@ -33,7 +33,7 @@ namespace Xarial.VPages.Framework.Binders
 
         private void TraverseType<TDataModel>(Type type, TDataModel model, List<PropertyInfo> parents,
             CreateBindingControlDelegate ctrlCreator,
-            IGroup parentCtrl, List<IBinding> bindings, IDependencyManager dependencies, ref int nextCtrlId)
+            IGroup parentCtrl, List<IBinding> bindings, IRawDependencyGroup dependencies, ref int nextCtrlId)
         {
             foreach (var prp in type.GetProperties())
             {

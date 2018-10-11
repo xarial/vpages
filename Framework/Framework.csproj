@@ -66,9 +66,12 @@
     <Compile Include="Base\Attributes\IIgnoreBindingAttribute.cs" />
     <Compile Include="Base\Attributes\ISpecificConstructorAttribute.cs" />
     <Compile Include="Base\IAttributeSet.cs" />
+    <Compile Include="Base\IBindingManager.cs" />
     <Compile Include="Base\IDependencyHandler.cs" />
+    <Compile Include="Base\IDependencyManager.cs" />
     <Compile Include="Base\IPageConstructor.cs" />
     <Compile Include="Base\IPageElementConstructor.cs" />
+    <Compile Include="Base\IRawDependencyGroup.cs" />
     <Compile Include="Binders\PropertyInfoBinding.cs" />
     <Compile Include="Base\IAttribute.cs" />
     <Compile Include="Base\IBinding.cs" />
@@ -81,11 +84,12 @@
     <Compile Include="Constructors\GroupConstructor.cs" />
     <Compile Include="Constructors\PageConstructor.cs" />
     <Compile Include="Constructors\PageElementConstructor.cs" />
+    <Compile Include="Core\BindingManager.cs" />
     <Compile Include="Core\DependencyManager.cs" />
+    <Compile Include="Core\RawDependencyGroup.cs" />
     <Compile Include="Core\SpecialTypes.cs" />
     <Compile Include="Core\AttributeSet.cs" />
     <Compile Include="Core\Binding.cs" />
-    <Compile Include="Core\BindingGroup.cs" />
     <Compile Include="Exceptions\ConstructorNotFoundException.cs" />
     <Compile Include="Exceptions\InvalidParentControlException.cs" />
     <Compile Include="Exceptions\OverdefinedConstructorException.cs" />

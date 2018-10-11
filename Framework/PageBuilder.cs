@@ -36,7 +36,7 @@ namespace Xarial.VPages.Core
 
             IEnumerable<IBinding> bindings;
 
-            IDependencyManager dependencies;
+            IRawDependencyGroup dependencies;
 
             m_DataBinder.Bind(model,
                 atts => 
@@ -47,8 +47,7 @@ namespace Xarial.VPages.Core
                 (type, atts, parent) => m_ControlConstructors.CreateElement(type, parent, atts),
                 out bindings, out dependencies);
 
-            dependencies.Init();
-            page.Binding.Load(bindings);
+            page.Binding.Load(bindings, dependencies);
 
             return page;
         }

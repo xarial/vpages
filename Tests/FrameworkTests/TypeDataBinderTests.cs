@@ -44,7 +44,7 @@ namespace FrameworkTests
             var binder = new TypeDataBinder();
             IEnumerable<IBinding> bindings;
 
-            IDependencyManager dependencies;
+            IRawDependencyGroup dependencies;
 
             binder.Bind(new DataModelMock1(),
                 a =>
@@ -71,7 +71,7 @@ namespace FrameworkTests
             var binder = new TypeDataBinder();
             IEnumerable<IBinding> bindings;
 
-            IDependencyManager dependencies;
+            IRawDependencyGroup dependencies;
 
             binder.Bind(new DataModelMock2(),
                 a =>
@@ -119,7 +119,7 @@ namespace FrameworkTests
 
             var parents = new Dictionary<IControl, IGroup>();
 
-            IDependencyManager dependencies;
+            IRawDependencyGroup dependencies;
 
             binder.Bind(new DataModelMock3(),
                 a =>
