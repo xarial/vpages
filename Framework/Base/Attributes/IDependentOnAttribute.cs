@@ -7,6 +7,7 @@ namespace Xarial.VPages.Framework.Base.Attributes
 {
     public interface IDependentOnAttribute : IAttribute
     {
-        string[] Dependencies { get; }
+        Type DependencyHandler { get; }
+        object[] Dependencies { get; }
     }
 }

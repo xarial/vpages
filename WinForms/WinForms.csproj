@@ -49,10 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constructors\LayoutControl.cs" />
+    <Compile Include="Constructors\CheckBoxConstructor.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\Group.cs" />
     <Compile Include="Constructors\GroupConstructor.cs" />
     <Compile Include="Constructors\NumberBoxConstructor.cs" />
+    <Compile Include="Controls\CheckBoxControl.cs" />
     <Compile Include="Controls\Page.cs" />
     <Compile Include="WinFormsPageBuilder.cs" />
     <Compile Include="Constructors\PageConstructor.cs" />

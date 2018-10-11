@@ -6,12 +6,15 @@ using Xarial.VPages.Framework.Base.Attributes;
 
 namespace Xarial.VPages.Framework.Attributes
 {
-    public class DependentOnAttribute : IDependentOnAttribute
+    public class DependentOnAttribute : Attribute, IDependentOnAttribute
     {
-        public string[] Dependencies { get; private set; }
+        public object[] Dependencies { get; private set; }
 
-        public DependentOnAttribute(params string[] dependencies)
+        public Type DependencyHandler { get; private set; }
+
+        public DependentOnAttribute(Type dependencyHandler, params object[] dependencies)
         {
+            DependencyHandler = dependencyHandler;
             Dependencies = dependencies;
         }
     }

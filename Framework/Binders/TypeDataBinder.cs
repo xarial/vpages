@@ -14,7 +14,7 @@ namespace Xarial.VPages.Framework.Binders
     {
         public void Bind<TDataModel>(TDataModel model, CreateBindingPageDelegate pageCreator,
             CreateBindingControlDelegate ctrlCreator,
-            out IEnumerable<IBinding> bindings)
+            out IEnumerable<IBinding> bindings, out IDependencyManager dependencies)
         {
             var type = model.GetType();
 
@@ -25,13 +25,15 @@ namespace Xarial.VPages.Framework.Binders
 
             var firstCtrlId = 0;
 
+            dependencies = new DependencyManager();
+
             TraverseType(model.GetType(), model, new List<PropertyInfo>(),
-                ctrlCreator, page, bindingsList, ref firstCtrlId);
+                ctrlCreator, page, bindingsList, dependencies, ref firstCtrlId);
         }
 
         private void TraverseType<TDataModel>(Type type, TDataModel model, List<PropertyInfo> parents,
             CreateBindingControlDelegate ctrlCreator,
-            IGroup parentCtrl, List<IBinding> bindings, ref int nextCtrlId)
+            IGroup parentCtrl, List<IBinding> bindings, IDependencyManager dependencies, ref int nextCtrlId)
         {
             foreach (var prp in type.GetProperties())
             {
@@ -47,6 +49,19 @@ namespace Xarial.VPages.Framework.Binders
                     var binding = new PropertyInfoBinding<TDataModel>(model, ctrl, prp, parents);
                     bindings.Add(binding);
 
+                    if (atts.Has<IControlTagAttribute>())
+                    {
+                        var tag = atts.Get<IControlTagAttribute>().Tag;
+                        dependencies.RegisterBindingTag(binding, tag);
+                    }
+
+                    if (atts.Has<IDependentOnAttribute>())
+                    {
+                        var depAtt = atts.Get<IDependentOnAttribute>();
+                        dependencies.RegisterDependency(binding, 
+                            depAtt.Dependencies, depAtt.DependencyHandler);
+                    }
+
                     binding.UpdateControl();
 
                     var isGroup = ctrl is IGroup;
@@ -56,7 +71,7 @@ namespace Xarial.VPages.Framework.Binders
                         var grpParents = new List<PropertyInfo>(parents);
                         grpParents.Add(prp);
                         TraverseType(prpType, model, grpParents, ctrlCreator,
-                            ctrl as IGroup, bindings, ref nextCtrlId);
+                            ctrl as IGroup, bindings, dependencies, ref nextCtrlId);
                     }
                 }
             }

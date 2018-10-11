@@ -20,5 +20,10 @@ namespace Xarial.VPages.WinForms
             Form = new Form();
             Layout = new LayoutControl(Form);
         }
+
+        public void Show()
+        {
+            Form.Show();
+        }
     }
 }

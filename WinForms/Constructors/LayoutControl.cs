@@ -42,7 +42,7 @@ namespace Xarial.VPages.WinForms.Constructors
                 height += ctrl.Height + ctrl.Margin.Top + ctrl.Margin.Bottom;
             }
             
-            m_Panel.Height = height;
+            m_Panel.Height = height * 2;
         }
     }
 }

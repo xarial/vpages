@@ -15,7 +15,7 @@ namespace Xarial.VPages.WinForms
 
         private TextBox m_TextBox;
 
-        internal override Control Control => m_TextBox;
+        public override Control Control => m_TextBox;
 
         internal TextBoxControl(int id, object tag) : base(id, tag)
         {

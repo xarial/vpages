@@ -4,6 +4,7 @@ using System.Linq;
 using Xarial.VPages.Framework.Attributes;
 using Xarial.VPages.Framework.Base;
 using Xarial.VPages.Framework.Constructors;
+using Xarial.VPages.Framework.Core;
 using Xarial.VPages.Framework.Internal;
 
 namespace Xarial.VPages.Core
@@ -35,6 +36,8 @@ namespace Xarial.VPages.Core
 
             IEnumerable<IBinding> bindings;
 
+            IDependencyManager dependencies;
+
             m_DataBinder.Bind(model,
                 atts => 
                 {
@@ -42,8 +45,9 @@ namespace Xarial.VPages.Core
                     return page;
                 },
                 (type, atts, parent) => m_ControlConstructors.CreateElement(type, parent, atts),
-                out bindings);
+                out bindings, out dependencies);
 
+            dependencies.Init();
             page.Binding.Load(bindings);
 
             return page;

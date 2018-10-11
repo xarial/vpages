@@ -85,7 +85,7 @@ namespace Xarial.VPages.Framework.Core
                     List<UpdateStateData> updates;
                     if (!m_Dependencies.TryGetValue(dependOnBinding, out updates))
                     {
-                        //TODO: subscribe to update event
+                        dependOnBinding.ModelUpdated += OnModelUpdated;
 
                         updates = new List<UpdateStateData>();
                         m_Dependencies.Add(dependOnBinding, updates);
@@ -94,6 +94,11 @@ namespace Xarial.VPages.Framework.Core
                     updates.Add(new UpdateStateData(srcBnd, dependOnBindings, handler));
                 }
             }
+        }
+
+        private void OnModelUpdated(IBinding binding)
+        {
+            m_Dependencies[binding].ForEach(u => u.Update());
         }
 
         public void RegisterBindingTag(IBinding binding, object tag)

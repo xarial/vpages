@@ -44,6 +44,8 @@ namespace FrameworkTests
             var binder = new TypeDataBinder();
             IEnumerable<IBinding> bindings;
 
+            IDependencyManager dependencies;
+
             binder.Bind(new DataModelMock1(),
                 a =>
                 {
@@ -52,7 +54,7 @@ namespace FrameworkTests
                 (t, a, p) =>
                 {
                     return new Moq.Mock<IControl>().Object;
-                }, out bindings);
+                }, out bindings, out dependencies);
 
             Assert.AreEqual(3, bindings.Count());
             Assert.AreEqual(typeof(DataModelMock1).GetProperty("Field1"),
@@ -69,6 +71,8 @@ namespace FrameworkTests
             var binder = new TypeDataBinder();
             IEnumerable<IBinding> bindings;
 
+            IDependencyManager dependencies;
+
             binder.Bind(new DataModelMock2(),
                 a =>
                 {
@@ -84,7 +88,7 @@ namespace FrameworkTests
                     {
                         return new Moq.Mock<IControl>().Object;
                     }
-                }, out bindings);
+                }, out bindings, out dependencies);
 
             Assert.AreEqual(7, bindings.Count());
             Assert.AreEqual(typeof(DataModelMock2).GetProperty("Field1"),
@@ -115,6 +119,8 @@ namespace FrameworkTests
 
             var parents = new Dictionary<IControl, IGroup>();
 
+            IDependencyManager dependencies;
+
             binder.Bind(new DataModelMock3(),
                 a =>
                 {
@@ -141,7 +147,7 @@ namespace FrameworkTests
                         parents.Add(ctrl, p);
                         return ctrl;
                     }
-                }, out bindings);
+                }, out bindings, out dependencies);
 
             Assert.AreEqual(page,
                 parents[(bindings.ElementAt(0) as PropertyInfoBinding<DataModelMock3>).Control]);
@@ -167,6 +173,11 @@ namespace FrameworkTests
 
         [TestMethod]
         public void TestBindAttributes()
+        {
+        }
+
+        [TestMethod]
+        public void TestDependencies()
         {
         }
     }
