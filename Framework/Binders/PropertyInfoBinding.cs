@@ -1,8 +1,14 @@
-﻿using System;
+﻿/*********************************************************************
+vPages
+Copyright(C) 2018 www.xarial.net
+Product URL: https://www.xarial.net/products/developers/vpages
+License: https://github.com/xarial/vpages/blob/master/LICENSE
+*********************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Xarial.VPages.Framework.Base;
 using Xarial.VPages.Framework.Core;
 
@@ -22,7 +28,7 @@ namespace Xarial.VPages.Framework.Binders
             m_Parents = parents;
         }
         
-        public override void UpdateDataModel()
+        protected override void SetDataModelValue()
         {
             var value = Control.GetValue();
             var curModel = GetCurrentModel();
@@ -32,7 +38,7 @@ namespace Xarial.VPages.Framework.Binders
             Property.SetValue(curModel, destVal, null);
         }
 
-        public override void UpdateUserControl()
+        protected override void SetUserControlValue()
         {
             var curModel = GetCurrentModel();
             var val = Property.GetValue(curModel, null);

@@ -15,7 +15,8 @@ namespace Xarial.VPages.WinForms
             : base(dataBinder, new FormPageConstructor(),
                   new FormGroupConstructor(),
                   new TextBoxConstructor(),
-                  new NumberBoxConstructor())
+                  new NumberBoxConstructor(),
+                  new CheckBoxConstructor())
         {
         }
 

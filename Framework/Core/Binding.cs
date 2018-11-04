@@ -1,17 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xarial.VPages.Core;
+﻿/*********************************************************************
+vPages
+Copyright(C) 2018 www.xarial.net
+Product URL: https://www.xarial.net/products/developers/vpages
+License: https://github.com/xarial/vpages/blob/master/LICENSE
+*********************************************************************/
+
+using System;
 using Xarial.VPages.Framework.Base;
 
 namespace Xarial.VPages.Framework.Core
 {
     public abstract class Binding<TDataModel> : IBinding
     {
-        internal protected IControl Control { get; private set; }
+        public event Action<IBinding> ModelUpdated;
+        public event Action<IBinding> ControlUpdated;
+
+        public IControl Control { get; private set; }
 
         protected TDataModel DataModel { get; private set; }
+
+        object IBinding.Model
+        {
+            get
+            {
+                return DataModel;
+            }
+        }
 
         public Binding(IControl control, TDataModel dataModel)
         {
@@ -19,14 +33,26 @@ namespace Xarial.VPages.Framework.Core
             Control = control;
             Control.ValueChanged += OnControlValueChanged;
         }
-
+        
         private void OnControlValueChanged(IControl sender, object newValue)
         {
             UpdateDataModel();
         }
 
-        public abstract void UpdateUserControl();
+        protected abstract void SetUserControlValue();
 
-        public abstract void UpdateDataModel();
+        protected abstract void SetDataModelValue();
+
+        public void UpdateControl()
+        {
+            SetUserControlValue();
+            ControlUpdated?.Invoke(this);
+        }
+
+        public void UpdateDataModel()
+        {
+            SetDataModelValue();
+            ModelUpdated?.Invoke(this);
+        }
     }
 }

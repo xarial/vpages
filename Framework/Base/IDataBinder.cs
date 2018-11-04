@@ -1,8 +1,12 @@
-﻿using System;
+﻿/*********************************************************************
+vPages
+Copyright(C) 2018 www.xarial.net
+Product URL: https://www.xarial.net/products/developers/vpages
+License: https://github.com/xarial/vpages/blob/master/LICENSE
+*********************************************************************/
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Xarial.VPages.Framework.Core;
 
 namespace Xarial.VPages.Framework.Base
 {
@@ -13,6 +17,6 @@ namespace Xarial.VPages.Framework.Base
     {
         void Bind<TDataModel>(TDataModel model, CreateBindingPageDelegate pageCreator,
             CreateBindingControlDelegate ctrlCreator,
-            out IEnumerable<IBinding> bindings);
+            out IEnumerable<IBinding> bindings, out IRawDependencyGroup dependencies);
     }
 }

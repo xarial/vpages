@@ -1,14 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿/*********************************************************************
+vPages
+Copyright(C) 2018 www.xarial.net
+Product URL: https://www.xarial.net/products/developers/vpages
+License: https://github.com/xarial/vpages/blob/master/LICENSE
+*********************************************************************/
+
+using System;
 
 namespace Xarial.VPages.Framework.Base
 {
     public interface IBinding
     {
-        void UpdateUserControl();
+        event Action<IBinding> ModelUpdated;
+        event Action<IBinding> ControlUpdated;
+
+        IControl Control { get; }
+        object Model { get; }
+
+        void UpdateControl();
         void UpdateDataModel();
     }
 }

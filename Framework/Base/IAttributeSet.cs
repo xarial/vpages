@@ -1,14 +1,19 @@
-﻿using System;
+﻿/*********************************************************************
+vPages
+Copyright(C) 2018 www.xarial.net
+Product URL: https://www.xarial.net/products/developers/vpages
+License: https://github.com/xarial/vpages/blob/master/LICENSE
+*********************************************************************/
+
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 
 namespace Xarial.VPages.Framework.Base
 {
     public interface IAttributeSet
     {
         int Id { get; }
+        object Tag { get; }
         string Name { get; }
         string Description { get; }
         Type BoundType { get; }

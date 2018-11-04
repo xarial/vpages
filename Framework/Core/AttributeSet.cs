@@ -1,8 +1,13 @@
-﻿using System;
+﻿/*********************************************************************
+vPages
+Copyright(C) 2018 www.xarial.net
+Product URL: https://www.xarial.net/products/developers/vpages
+License: https://github.com/xarial/vpages/blob/master/LICENSE
+*********************************************************************/
+
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using Xarial.VPages.Framework.Base;
 
 namespace Xarial.VPages.Framework.Core
@@ -13,15 +18,17 @@ namespace Xarial.VPages.Framework.Core
         public string Name { get; private set; }
         public string Description { get; private set; }
         public Type BoundType { get; private set; }
+        public object Tag { get; private set; }
 
         private readonly Dictionary<Type, List<IAttribute>> m_Attributes;
 
-        internal AttributeSet(int ctrlId, string ctrlName, string desc, Type boundType)
+        internal AttributeSet(int ctrlId, string ctrlName, string desc, Type boundType, object tag)
         {
             Id = ctrlId;
             Name = ctrlName;
             Description = desc;
             BoundType = boundType;
+            Tag = tag;
 
             m_Attributes = new Dictionary<Type, List<IAttribute>>();
         }

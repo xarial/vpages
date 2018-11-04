@@ -1,8 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*********************************************************************
+vPages
+Copyright(C) 2018 www.xarial.net
+Product URL: https://www.xarial.net/products/developers/vpages
+License: https://github.com/xarial/vpages/blob/master/LICENSE
+*********************************************************************/
+
+using System;
 using System.Linq;
-using System.Text;
-using Xarial.VPages.Core;
 using System.Diagnostics;
 using Xarial.VPages.Framework.Base;
 
@@ -51,10 +55,13 @@ namespace Xarial.VPages.Framework.PageElements
 
         public int Id { get; private set; }
 
-        protected Control(int id)
+        protected Control(int id, object tag)
         {
             Id = id;
+            Tag = tag;
         }
+
+        public object Tag { get; private set; }
 
         protected abstract TVal GetSpecificValue();
         protected abstract void SetSpecificValue(TVal value);
