@@ -1,7 +1,13 @@
-﻿using System;
+﻿/*********************************************************************
+vPages
+Copyright(C) 2018 www.xarial.net
+Product URL: https://www.xarial.net/products/developers/vpages
+License: https://github.com/xarial/vpages/blob/master/LICENSE
+*********************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xarial.VPages.Framework.Base;
 
 namespace Xarial.VPages.Framework.Core
