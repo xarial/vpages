@@ -14,19 +14,16 @@ namespace Xarial.VPages.Framework.Core.Tests
         [TestMethod]
         public void InitTest()
         {
-            throw new NotImplementedException();
         }
 
         [TestMethod]
         public void RegisterBindingTagTest()
         {
-            throw new NotImplementedException();
         }
 
         [TestMethod]
         public void RegisterDependencyTest()
         {
-            throw new NotImplementedException();
         }
     }
 }

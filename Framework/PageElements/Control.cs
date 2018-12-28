@@ -70,5 +70,9 @@ namespace Xarial.VPages.Framework.PageElements
         {
             return GetSpecificValue();
         }
+
+        public virtual void Dispose()
+        {
+        }
     }
 }

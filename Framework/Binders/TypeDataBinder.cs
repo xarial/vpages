@@ -36,6 +36,22 @@ namespace Xarial.VPages.Framework.Binders
 
             TraverseType(model.GetType(), model, new List<PropertyInfo>(),
                 ctrlCreator, page, bindingsList, dependencies, ref firstCtrlId);
+
+            OnBeforeControlsDataLoad(bindings);
+
+            LoadControlsData(bindings);
+        }
+
+        private void LoadControlsData(IEnumerable<IBinding> bindings)
+        {
+            foreach (var binding in bindings)
+            {
+                binding.UpdateControl();
+            }
+        }
+
+        protected virtual void OnBeforeControlsDataLoad(IEnumerable<IBinding> bindings)
+        {
         }
 
         private void TraverseType<TDataModel>(Type type, TDataModel model, List<PropertyInfo> parents,
@@ -69,7 +85,7 @@ namespace Xarial.VPages.Framework.Binders
                             depAtt.Dependencies, depAtt.DependencyHandler);
                     }
 
-                    binding.UpdateControl();
+                    //binding.UpdateControl();
 
                     var isGroup = ctrl is IGroup;
 

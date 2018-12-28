@@ -32,7 +32,7 @@ namespace Xarial.VPages.Core
             m_ControlConstructors = new ConstructorsContainer<TPage, TGroup>(ctrlsContstrs);
         }
         
-        public TPage CreatePage<TModel>(TModel model)
+        public virtual TPage CreatePage<TModel>(TModel model)
         {
             var page = default(TPage);
 
@@ -50,8 +50,14 @@ namespace Xarial.VPages.Core
                 out bindings, out dependencies);
 
             page.Binding.Load(bindings, dependencies);
+            UpdatePageDependenciesState(page);
 
             return page;
+        }
+
+        protected virtual void UpdatePageDependenciesState(TPage page)
+        {
+            page.Binding.Dependency.UpdateAll();
         }
     }
 }

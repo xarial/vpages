@@ -10,5 +10,6 @@ namespace Xarial.VPages.Framework.Base
     public interface IDependencyManager
     {
         void Init(IRawDependencyGroup depGroup);
+        void UpdateAll();
     }
 }
