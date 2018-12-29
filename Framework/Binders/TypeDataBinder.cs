@@ -28,7 +28,11 @@ namespace Xarial.VPages.Framework.Binders
             var bindingsList = new List<IBinding>();
             bindings = bindingsList;
 
-            var page = pageCreator.Invoke(GetAttributeSet(type, -1));
+            var pageAttSet = GetAttributeSet(type, -1);
+
+            OnGetPageAttributeSet(type, ref pageAttSet);
+
+            var page = pageCreator.Invoke(pageAttSet);
 
             var firstCtrlId = 0;
 
@@ -40,6 +44,10 @@ namespace Xarial.VPages.Framework.Binders
             OnBeforeControlsDataLoad(bindings);
 
             LoadControlsData(bindings);
+        }
+
+        protected virtual void OnGetPageAttributeSet(Type pageType, ref IAttributeSet attSet)
+        {
         }
 
         private void LoadControlsData(IEnumerable<IBinding> bindings)
@@ -84,9 +92,7 @@ namespace Xarial.VPages.Framework.Binders
                         dependencies.RegisterDependency(binding, 
                             depAtt.Dependencies, depAtt.DependencyHandler);
                     }
-
-                    //binding.UpdateControl();
-
+                    
                     var isGroup = ctrl is IGroup;
 
                     if (isGroup)
