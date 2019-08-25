@@ -123,7 +123,7 @@ namespace Xarial.VPages.Framework.Binders
                 name = prp.Name;
             }
 
-            return CreateAttributeSet(ctrlId, name, desc, type, prpAtts.Union(typeAtts).ToArray(), tag);
+            return CreateAttributeSet(ctrlId, name, desc, type, prpAtts.Union(typeAtts).ToArray(), tag, prp);
         }
 
         private IAttributeSet GetAttributeSet(Type type, int ctrlId)
@@ -160,9 +160,9 @@ namespace Xarial.VPages.Framework.Binders
         }
 
         private IAttributeSet CreateAttributeSet(int ctrlId, string ctrlName, 
-            string desc, Type boundType, IAttribute[] atts, object tag)
+            string desc, Type boundType, IAttribute[] atts, object tag, MemberInfo boundMemberInfo = null)
         {
-            var attsSet = new AttributeSet(ctrlId, ctrlName, desc, boundType, tag);
+            var attsSet = new AttributeSet(ctrlId, ctrlName, desc, boundType, tag, boundMemberInfo);
 
             if (atts?.Any() == true)
             {
