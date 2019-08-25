@@ -28,7 +28,11 @@ namespace Xarial.VPages.Framework.Binders
             var bindingsList = new List<IBinding>();
             bindings = bindingsList;
 
-            var page = pageCreator.Invoke(GetAttributeSet(type, -1));
+            var pageAttSet = GetAttributeSet(type, -1);
+
+            OnGetPageAttributeSet(type, ref pageAttSet);
+
+            var page = pageCreator.Invoke(pageAttSet);
 
             var firstCtrlId = 0;
 
@@ -36,6 +40,26 @@ namespace Xarial.VPages.Framework.Binders
 
             TraverseType(model.GetType(), model, new List<PropertyInfo>(),
                 ctrlCreator, page, bindingsList, dependencies, ref firstCtrlId);
+
+            OnBeforeControlsDataLoad(bindings);
+
+            LoadControlsData(bindings);
+        }
+
+        protected virtual void OnGetPageAttributeSet(Type pageType, ref IAttributeSet attSet)
+        {
+        }
+
+        private void LoadControlsData(IEnumerable<IBinding> bindings)
+        {
+            foreach (var binding in bindings)
+            {
+                binding.UpdateControl();
+            }
+        }
+
+        protected virtual void OnBeforeControlsDataLoad(IEnumerable<IBinding> bindings)
+        {
         }
 
         private void TraverseType<TDataModel>(Type type, TDataModel model, List<PropertyInfo> parents,
@@ -68,9 +92,7 @@ namespace Xarial.VPages.Framework.Binders
                         dependencies.RegisterDependency(binding, 
                             depAtt.Dependencies, depAtt.DependencyHandler);
                     }
-
-                    binding.UpdateControl();
-
+                    
                     var isGroup = ctrl is IGroup;
 
                     if (isGroup)
@@ -101,7 +123,7 @@ namespace Xarial.VPages.Framework.Binders
                 name = prp.Name;
             }
 
-            return CreateAttributeSet(ctrlId, name, desc, type, prpAtts.Union(typeAtts).ToArray(), tag);
+            return CreateAttributeSet(ctrlId, name, desc, type, prpAtts.Union(typeAtts).ToArray(), tag, prp);
         }
 
         private IAttributeSet GetAttributeSet(Type type, int ctrlId)
@@ -138,9 +160,9 @@ namespace Xarial.VPages.Framework.Binders
         }
 
         private IAttributeSet CreateAttributeSet(int ctrlId, string ctrlName, 
-            string desc, Type boundType, IAttribute[] atts, object tag)
+            string desc, Type boundType, IAttribute[] atts, object tag, MemberInfo boundMemberInfo = null)
         {
-            var attsSet = new AttributeSet(ctrlId, ctrlName, desc, boundType, tag);
+            var attsSet = new AttributeSet(ctrlId, ctrlName, desc, boundType, tag, boundMemberInfo);
 
             if (atts?.Any() == true)
             {

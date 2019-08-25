@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Xarial.VPages.Framework</id>
-    <version>0.3.0</version>
+    <version>0.3.2</version>
     <title>vPages</title>
     <authors>Xarial</authors>
     <owners>Xarial</owners>
@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Framework for abstract data driven pages</description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright © Xarial 2018</copyright>
+    <copyright>Copyright © Xarial 2019</copyright>
     <tags>Pages Data UI Forms</tags>
   </metadata>
 </package>

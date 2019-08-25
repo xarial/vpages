@@ -84,11 +84,9 @@ namespace Xarial.VPages.Framework.Core
                     updates.Add(new UpdateStateData(srcBnd, dependOnBindings, handler));
                 }
             }
-
-            UpdateAll();
         }
 
-        private void UpdateAll()
+        public void UpdateAll()
         {
             foreach (var state in m_Dependencies.SelectMany(b => b.Value))
             {

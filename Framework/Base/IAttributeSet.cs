@@ -7,6 +7,7 @@ License: https://github.com/xarial/vpages/blob/master/LICENSE
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Xarial.VPages.Framework.Base
 {
@@ -17,6 +18,7 @@ namespace Xarial.VPages.Framework.Base
         string Name { get; }
         string Description { get; }
         Type BoundType { get; }
+        MemberInfo BoundMemberInfo { get; }
 
         bool Has<TAtt>() where TAtt : IAttribute;
 

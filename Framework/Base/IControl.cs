@@ -5,11 +5,13 @@ Product URL: https://www.xarial.net/products/developers/vpages
 License: https://github.com/xarial/vpages/blob/master/LICENSE
 *********************************************************************/
 
+using System;
+
 namespace Xarial.VPages.Framework.Base
 {
     public delegate void ControlObjectValueChangedDelegate(IControl sender, object newValue);
 
-    public interface IControl
+    public interface IControl : IDisposable
     {
         event ControlObjectValueChangedDelegate ValueChanged;
 
