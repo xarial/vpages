@@ -5,6 +5,7 @@ Product URL: https://www.xarial.net/products/developers/vpages
 License: https://github.com/xarial/vpages/blob/master/LICENSE
 *********************************************************************/
 
+using System;
 using System.Collections.Generic;
 using Xarial.VPages.Framework.Base;
 using Xarial.VPages.Framework.Internal;
@@ -46,7 +47,11 @@ namespace Xarial.VPages.Core
                     page = m_PageConstructor.Create(atts);
                     return page;
                 },
-                (type, atts, parent) => m_ControlConstructors.CreateElement(type, parent, atts),
+                (Type type, IAttributeSet atts, IGroup parent, out int idRange) =>
+                {
+                    idRange = 1;
+                    return m_ControlConstructors.CreateElement(type, parent, atts, ref idRange);
+                },
                 out bindings, out dependencies);
 
             page.Binding.Load(bindings, dependencies);

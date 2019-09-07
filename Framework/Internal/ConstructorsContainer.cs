@@ -151,7 +151,7 @@ namespace Xarial.VPages.Framework.Internal
             }
         }
 
-        internal IControl CreateElement(Type type, IGroup parent, IAttributeSet atts)
+        internal IControl CreateElement(Type type, IGroup parent, IAttributeSet atts, ref int idRange)
         {
             if (type == null)
             {
@@ -174,11 +174,11 @@ namespace Xarial.VPages.Framework.Internal
 
             if (parent is TPage)
             {
-                return constr.Create((TPage)parent, atts);
+                return constr.Create((TPage)parent, atts, ref idRange);
             }
             else if (parent is TGroup)
             {
-                return constr.Create((TGroup)parent, atts);
+                return constr.Create((TGroup)parent, atts, ref idRange);
             }
             else
             {

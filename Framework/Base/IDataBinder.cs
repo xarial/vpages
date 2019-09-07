@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Xarial.VPages.Framework.Base
 {
-    public delegate IControl CreateBindingControlDelegate(Type dataType, IAttributeSet atts, IGroup parent);
+    public delegate IControl CreateBindingControlDelegate(Type dataType, IAttributeSet atts, IGroup parent, out int idRange);
     public delegate IPage CreateBindingPageDelegate(IAttributeSet atts);
 
     public interface IDataModelBinder

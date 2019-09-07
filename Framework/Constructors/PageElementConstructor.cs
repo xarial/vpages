@@ -17,14 +17,24 @@ namespace Xarial.VPages.Framework.Constructors
         protected abstract TElem Create(TPage page, IAttributeSet atts);
         protected abstract TElem Create(TGroup group, IAttributeSet atts);
 
-        IControl IPageElementConstructor<TGroup, TPage>.Create(TPage page, IAttributeSet atts)
+        protected virtual TElem Create(TPage page, IAttributeSet atts, ref int idRange)
         {
             return Create(page, atts);
         }
 
-        IControl IPageElementConstructor<TGroup, TPage>.Create(TGroup group, IAttributeSet atts)
+        protected virtual TElem Create(TGroup group, IAttributeSet atts, ref int idRange)
         {
             return Create(group, atts);
+        }
+
+        IControl IPageElementConstructor<TGroup, TPage>.Create(TPage page, IAttributeSet atts, ref int idRange)
+        {
+            return Create(page, atts, ref idRange);
+        }
+
+        IControl IPageElementConstructor<TGroup, TPage>.Create(TGroup group, IAttributeSet atts, ref int idRange)
+        {
+            return Create(group, atts, ref idRange);
         }
     }
 }

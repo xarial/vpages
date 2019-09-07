@@ -74,8 +74,9 @@ namespace Xarial.VPages.Framework.Binders
 
                 if (!atts.Has<IIgnoreBindingAttribute>())
                 {
-                    var ctrl = ctrlCreator.Invoke(prpType, atts, parentCtrl);
-                    nextCtrlId++;
+                    int idRange;
+                    var ctrl = ctrlCreator.Invoke(prpType, atts, parentCtrl, out idRange);
+                    nextCtrlId += idRange;
 
                     var binding = new PropertyInfoBinding<TDataModel>(model, ctrl, prp, parents);
                     bindings.Add(binding);

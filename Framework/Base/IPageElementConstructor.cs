@@ -11,7 +11,7 @@ namespace Xarial.VPages.Framework.Base
         where TGroup : IGroup
         where TPage : IPage
     {
-        IControl Create(TPage page, IAttributeSet atts);
-        IControl Create(TGroup group, IAttributeSet atts);
+        IControl Create(TPage page, IAttributeSet atts, ref int idRange);
+        IControl Create(TGroup group, IAttributeSet atts, ref int idRange);
     }
 }
