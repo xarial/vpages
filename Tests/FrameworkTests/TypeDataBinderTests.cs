@@ -51,8 +51,9 @@ namespace FrameworkTests
                 {
                     return new Moq.Mock<IPage>().Object;
                 },
-                (t, a, p) =>
+                (Type t, IAttributeSet a, IGroup p, out int r) =>
                 {
+                    r = 1;
                     return new Moq.Mock<IControl>().Object;
                 }, out bindings, out dependencies);
 
@@ -78,8 +79,9 @@ namespace FrameworkTests
                 {
                     return new Moq.Mock<IPage>().Object;
                 },
-                (t, a, p) =>
+                (Type t, IAttributeSet a, IGroup p, out int r) =>
                 {
+                    r = 1;
                     if (t == typeof(DataModelMock1))
                     {
                         return new Moq.Mock<IGroup>().Object;
@@ -127,8 +129,9 @@ namespace FrameworkTests
                     page = new Moq.Mock<IPage>().Object;
                     return page;
                 },
-                (t, a, p) =>
+                (Type t, IAttributeSet a, IGroup p, out int r) =>
                 {
+                    r = 1;
                     if (t == typeof(DataModelMock1))
                     {
                         grp1 = new Moq.Mock<IGroup>().Object;
@@ -169,6 +172,35 @@ namespace FrameworkTests
                 parents[(bindings.ElementAt(7) as PropertyInfoBinding<DataModelMock3>).Control]);
             Assert.AreEqual(grp1,
                 parents[(bindings.ElementAt(8) as PropertyInfoBinding<DataModelMock3>).Control]);
+        }
+
+        [TestMethod]
+        public void TestBindIds()
+        {
+            var binder = new TypeDataBinder();
+            IEnumerable<IBinding> bindings;
+
+            IPage page = null;
+            
+            IRawDependencyGroup dependencies;
+
+            binder.Bind(new DataModelMock1(),
+                a =>
+                {
+                    page = new Moq.Mock<IPage>().Object;
+                    return page;
+                },
+                (Type t, IAttributeSet a, IGroup p, out int r) =>
+                {
+                    r = 1;
+                    var ctrlMock = new Moq.Mock<IControl>();
+                    ctrlMock.SetupGet(c => c.Id).Returns(() => a.Id);
+                    return ctrlMock.Object;
+                }, out bindings, out dependencies);
+
+            Assert.AreEqual(0, bindings.ElementAt(0).Control.Id);
+            Assert.AreEqual(1, bindings.ElementAt(1).Control.Id);
+            Assert.AreEqual(2, bindings.ElementAt(2).Control.Id);
         }
 
         [TestMethod]
