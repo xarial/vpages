@@ -16,7 +16,8 @@ namespace Xarial.VPages.WinForms
                   new FormGroupConstructor(),
                   new TextBoxConstructor(),
                   new NumberBoxConstructor(),
-                  new CheckBoxConstructor())
+                  new CheckBoxConstructor(),
+                  new ButtonConstructor())
         {
         }
 
