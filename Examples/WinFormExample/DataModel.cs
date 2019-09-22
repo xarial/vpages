@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,11 +27,29 @@ namespace WinFormExample
         }
     }
 
-    public class DataModel
+    public class DataModel : INotifyPropertyChanged
     {
-        public class DataGroup
+        public event PropertyChangedEventHandler PropertyChanged;
+        
+        public class DataGroup : INotifyPropertyChanged
         {
-            public string GroupTextField1 { get; set; }
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            private string m_GroupTextField1;
+
+            public string GroupTextField1
+            {
+                get
+                {
+                    return m_GroupTextField1;
+                }
+                set
+                {
+                    m_GroupTextField1 = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GroupTextField1)));
+                }
+            }
+
             public string GroupTextField2 { get; set; }
             public decimal NumberField1 { get; set; }
             public decimal NumberField2 { get; set; }
@@ -43,15 +62,36 @@ namespace WinFormExample
             public string GroupTextField5 { get; set; }
         }
 
+        private bool m_Option;
+
         public string TextField { get; set; }
 
         [ControlTag(ControlTags_e.Number)]
         [DependentOn(typeof(MyDependencyHandler), ControlTags_e.Option)]
         public decimal NumberField { get; set; }
-
+        
         [ControlTag(ControlTags_e.Option)]
-        public bool Option { get; set; }
+        public bool Option
+        {
+            get
+            {
+                return m_Option;
+            }
+            set
+            {
+                m_Option = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Option)));
+            }
+        }
 
         public DataGroup Group { get; set; }
+
+        public Action Button => OnButtonClick;
+
+        private void OnButtonClick()
+        {
+            Group.GroupTextField1 = "Hello";
+            Option = !Option;
+        }
     }
 }
